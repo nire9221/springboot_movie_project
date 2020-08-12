@@ -2,8 +2,5 @@
 
 1. UML diagram - Use case, Class, Sequence (자기가 맡은 파트)
 2. 회록 : 
-3. work log :https://docs.google.com/spreadsheets/d/1VzRN4zKcy-HUfNO2VryLlOybEFfc0r-YHG_5R8wOOT8/edit?usp=sharing
+3. work log :https://drive.google.com/drive/folders/1mFs5tBkdu5f1yZE_12W-jTBFNnQGgub5?usp=sharing
 
-
-aasasaosaosadsaooooodso
-dsds
