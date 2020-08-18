@@ -12,7 +12,7 @@ public class DBConnection {
 	public void test() throws Exception {
 		Class.forName("org.mariadb.jdbc.Driver"); // 마리아DB
 		// Class.forName("com.mysql.jdbc.Driver"); MySQL
-
+		// 이게 추가 될까요?
 		Connection con = DriverManager.getConnection("jdbc:mariadb://114.200.5.121:65533/cgv", "CGV", "1234");// 마리아DB
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery("select * from mytable");
