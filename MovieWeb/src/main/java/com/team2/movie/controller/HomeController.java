@@ -45,6 +45,6 @@ public class HomeController {
 		// 결과 값 출력
 		System.out.println("node : "+node);
 		System.out.println("로그인 후 반환되는 아이디 : " + node.get("id"));
-		return "redirect:/home";
+		return "redirect:/signup";
 	}
 }
