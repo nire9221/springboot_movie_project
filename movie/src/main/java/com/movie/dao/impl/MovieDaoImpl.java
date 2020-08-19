@@ -1,6 +1,6 @@
 package com.movie.dao.impl;
 
-import com.movie.dao.api.MovieDao;
+import com.team3.movie.dao.api.MovieDao;
 
 public class MovieDaoImpl implements MovieDao {
 
