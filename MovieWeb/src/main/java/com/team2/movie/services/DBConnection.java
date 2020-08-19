@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import org.junit.Test;
+//import org.junit.Test;
 
 public class DBConnection {
 
-	@Test
+//	@Test
 	public void test() throws Exception {
 		Class.forName("org.mariadb.jdbc.Driver"); // 마리아DB
 		// Class.forName("com.mysql.jdbc.Driver"); MySQL
