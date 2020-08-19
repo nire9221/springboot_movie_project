@@ -1,4 +1,4 @@
-package com.team3.movie.controller;
+package com.team2.movie.controller;
 
 public class HomeController {
 

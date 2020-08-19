@@ -1,4 +1,4 @@
-package com.team3.movie.services;
+package com.team2.movie.services;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
