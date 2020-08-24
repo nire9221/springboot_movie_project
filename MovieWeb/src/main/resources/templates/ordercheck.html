@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ 
+카카오페이 결제가 정상적으로 완료되었습니다.<br>
+결제일시:    <span th:text="${info.approved_at}"></span><br>
+주문번호:    <span th:text="${info.partner_order_id}"></span><br/>
+상품명:     <span th:text="${info.item_name}"></span><br/>
+상품수량:    <span th:text="${info.quantity}"></span><br/>
+결제금액:    <span th:text="${info.amount.total}"></span><br/>
+결제방법:    <span th:text="${info.payment_method_type}"></span><br/>
+ 
+</body>
+</html>
