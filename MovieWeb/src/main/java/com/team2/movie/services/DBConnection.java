@@ -4,7 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 public class DBConnection {
 	
