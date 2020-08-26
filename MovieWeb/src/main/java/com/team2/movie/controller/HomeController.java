@@ -20,7 +20,7 @@ import lombok.extern.java.Log;
 @Controller
 public class HomeController {
 	@GetMapping("/")
-	public String hi() {
+	public String main() {
 		return "main";
 	}
 	
@@ -93,5 +93,24 @@ public class HomeController {
         model.addAttribute("info", kakaopay.kakaoPayInfo(pg_token));
         
         return "ordercheck";
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    
+    @GetMapping("/seat")
+    public String seat() {
+    	return "seatselect";
+    }
+    
+    @GetMapping("/seattest")
+    public String seattest(@RequestParam("seat") String seat, Model model) {
+    	model.addAttribute("seat", seat);
+    	return "seattest";
+    }
+    
+    @GetMapping("/seattest2")
+    public String seattest2(@RequestParam("seat") String seat) {
+    	System.out.println(seat);
+    	return "seattest2";
     }
 }
