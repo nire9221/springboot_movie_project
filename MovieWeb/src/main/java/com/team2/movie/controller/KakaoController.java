@@ -33,7 +33,7 @@ public class KakaoController {
 
 		postParams.add(new BasicNameValuePair("client_id", "d7aa1a058208ce9c3e3d0a97bf67df5f"));
 
-		postParams.add(new BasicNameValuePair("redirect_uri", "http://192.168.0.9:65535/oauth"));
+		postParams.add(new BasicNameValuePair("redirect_uri", "http://114.200.5.121:65532/oauth"));
 
 		postParams.add(new BasicNameValuePair("code", autorize_code));
 

@@ -2,16 +2,25 @@ package com.team2.movie.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.team2.movie.services.KakaoPay;
+
+import lombok.Setter;
+import lombok.extern.java.Log;
+
+@Log
 @Controller
 public class HomeController {
 	@GetMapping("/")
-	public String hi() {
+	public String main() {
 		return "main";
 	}
 	
@@ -45,6 +54,63 @@ public class HomeController {
 		// 결과 값 출력
 		System.out.println("node : "+node);
 		System.out.println("로그인 후 반환되는 아이디 : " + node.get("id"));
-		return "redirect:/signup";
+		
+		session.setAttribute("id", node.get("id"));
+		return "signup";
+		//return "redirect:/signup";
 	}
+	
+//////////////////////////////////////////////////////////	
+	
+	@Setter(onMethod_ = @Autowired)
+    private KakaoPay kakaopay;
+    
+	
+	@GetMapping("/testpay")
+	public String test() {
+		return "kakaopay";
+	}
+    
+//    @GetMapping("/kakaoPay")
+//    public void kakaoPayGet() {
+//        
+//    }
+    
+    @PostMapping("/kakaoPay")
+    public String kakaoPay() {
+        log.info("kakaoPay post............................................");
+        System.out.println("여기로 오겠지");
+        return "redirect:" + kakaopay.kakaoPayReady();
+        //return "kakaopay.kakaoPayReady()";
+    }
+    
+    @GetMapping("/kakaoPaySuccess")
+    public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model) {
+    	System.out.println("여기 오냐?");
+        log.info("kakaoPaySuccess get............................................");
+        log.info("kakaoPaySuccess pg_token : " + pg_token);
+        
+        model.addAttribute("info", kakaopay.kakaoPayInfo(pg_token));
+        
+        return "ordercheck";
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    
+    @GetMapping("/seat")
+    public String seat() {
+    	return "seatselect";
+    }
+    
+    @GetMapping("/seattest")
+    public String seattest(@RequestParam("seat") String seat, Model model) {
+    	model.addAttribute("seat", seat);
+    	return "seattest";
+    }
+    
+    @GetMapping("/seattest2")
+    public String seattest2(@RequestParam("seat") String seat) {
+    	System.out.println(seat);
+    	return "seattest2";
+    }
 }
