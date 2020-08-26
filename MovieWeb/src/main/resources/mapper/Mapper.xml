@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.map.prac.mapper.MapMapper">
+
+	<select id="searchAllTickets"
+		resultType="package com.team2.movie.dao.dto.Ticket">
+		select * from Ticket
+	</select>
+
+	<select id="selectTicketbyTicketId" resultType="package com.team2.movie.dao.dto.Ticket">
+		select * from Ticket
+		where ticketid = #{ticketid}
+	</select>
+
+	<select id="selectTicketbyUser" resultType="package com.team2.movie.dao.dto.Ticket">
+		select * from Ticket
+		where kakaoId = #{kakaoId}
+	</select>
+
+	<insert id="newTicket">
+		insert into Ticket (groupNum, kakaoId, seatid,
+		ticketPrice, ticketDiscount)
+		values (#{groupNum}, #{kakaoId},
+		#{seatid}, #{ticketPrice},
+		#{ticketDiscount})
+	</insert>
+
+</mapper>
