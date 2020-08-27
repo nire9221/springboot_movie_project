@@ -1,17 +1,15 @@
 package com.team2.movie;
 
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.team2.movie.dao.dto.TicketDto;
 
-import java.util.List;
-
-@Mapper
+//@Mapper
 public interface TicketMapper {
-    
-    List<TicketDto> selectAllTicket();
-    TicketDto selectTicketByTicketid();
-    void newTicket(TicketDto ticketdto);
+	
+	public List<TicketDto> selectAllTickets();
+	
 
 }

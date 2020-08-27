@@ -1,11 +1,7 @@
 package com.team2.movie.dao.dto;
 
-
-
 import javax.persistence.Column;
-
 import org.apache.ibatis.type.Alias;
-
 import lombok.Data;
 
 @Data

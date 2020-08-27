@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Ticket View</title>
+</head>
+<body>
+
+<table>
+      <tr>
+        <th>groupNum</th>
+        <th>kakaoId</th>
+        <th>seatid</th>
+         <th>ticketPrice</th>
+        <th>ticketDiscount</th>
+      </tr>
+      <tr th:each="list : ${list}">
+        <td th:text="${list.groupNum}">aa</td>
+        <td th:text="${list.kakaoId}">bb</td>
+        <td th:text="${list.seatid}">cc</td>
+        <td th:text="${list.ticketPrice}">aa</td>
+        <td th:text="${list.ticketDiscount}">bb</td>
+      </tr>
+</table>
+
+</body>
+</html>
