@@ -97,7 +97,7 @@ public class HomeController {
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     
-    @GetMapping("/seat")
+    @GetMapping("/seatselect")
     public String seat() {
     	return "seatselect";
     }

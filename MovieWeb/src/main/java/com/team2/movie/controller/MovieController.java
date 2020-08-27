@@ -1,5 +1,10 @@
 package com.team2.movie.controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -8,7 +13,6 @@ import java.util.Map;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +20,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -29,40 +35,38 @@ import com.team2.movie.dao.api.MovieDetailDao;
 import com.team2.movie.dao.api.MovieMainDao;
 import com.team2.movie.dao.dto.MovieDetail;
 import com.team2.movie.dao.dto.MovieMain;
-import com.team2.movie.services.RepoService;
 
 @Controller
 public class MovieController {
-	
+
 	@Autowired
 	MovieMainDao moviemaindao;
 
 	@Autowired
 	MovieDetailDao moviedetaildao;
-	// 영화정보 업데이트
-//	@RequestMapping(value = "/update")
-//	public void updateMovieDB() throws JsonProcessingException {
-//		MovieMainJson movieMainJson = new MovieMainJson();
-//		MovieDetailJson movieDetailJson = new MovieDetailJson();
-//		
-//		movieMainJson.callBoxOffice();
-//		movieDetailJson.callMovieList();
+
+//	 @GetMapping("/sample")
+//	 public String naverImage(Model model) throws IOException {
+//		 model.addAttribute("naver", "naverInfo());
+//		 return "sample";
+//	 }
+
+//	@RequestMapping("/main")
+//	public ModelAndView getList(ModelAndView mav) {
+//		mav.setViewName("list"); // 뷰의 이름
+//		List<MovieMain> list = moviemaindao.findAll();
+//		mav.addObject("list", list); // 뷰에 전달할 데이터
+//		return mav; // 뷰로 이동 (화면 출력함)
+//	}
+	
+//	@RequestMapping("/main")
+//	public String getList(Model model) {
+//		List<MovieMain> list = moviemaindao.findAll();
+//		model.addAttribute("list", list); // 뷰에 전달할 데이터
+//		return "main"; // 뷰로 이동 (화면 출력함)
 //	}
 
-	/*
-	 * jsp 페이지에서 구분자로 "/testPage/insert_data" 값으로 던져주었기 떄문에 해당 값으로 RequesetMapping을
-	 * 합니다. post 형식으로 던졌기 때문에 post로 받아주기! (GET/POST 형식의 차이는 면접에서 자주 물어보는 기본 질문이니
-	 * 숙지합시다 ㅎㅎ)
-	 */
-//	@RequestMapping(value = "/testPage/insert_data", method = RequestMethod.POST)
-
-	// 메서드 작성하기 @Model 어노테이션을 통해 testPage 생성
-//	public String insert_data(@ModelAttribute testPage testpage) {
-//
-//		System.out.print(testpage.toString()); // view에서 제대로 값 던져주는지 확인하기
-//
-//		return "redirect:/testPage"; // 요청 처리 후 testPage로 다시 연결
-//	}
+//---------------------------------------API 정보 db 저장-----------------------------------------	
 
 	// 메인페이지 영화 정보
 	@GetMapping("/boxoffice")
@@ -76,7 +80,7 @@ public class MovieController {
 
 		String key = "ab4da447d209d1ad3bcce6ca4e89ef03";
 		String targetDate = "20200801";
-		
+
 		// 페이지에 나타낼 갯수
 
 		try {
@@ -99,8 +103,7 @@ public class MovieController {
 
 			// 요청할 주소
 			// movie main 의 정보, 여기서 movieCd 값을 찾아 받는다
-			UriComponents uri = UriComponentsBuilder
-					.fromHttpUrl(url + "?key=" + key + "&targetDt=" + targetDate)
+			UriComponents uri = UriComponentsBuilder.fromHttpUrl(url + "?key=" + key + "&targetDt=" + targetDate)
 					.build();
 
 			// API를 호출해 MAP타입으로 전달 받는다.
@@ -122,15 +125,15 @@ public class MovieController {
 
 			LinkedHashMap mnList = new LinkedHashMap<>(); // K object, V object
 
-			List <MovieMain> movieMain = new ArrayList<>();
-			
+			List<MovieMain> movieMain = new ArrayList<>();
+
 			for (Map obj : dboxoffList) {
 				MovieMain movie = new MovieMain();
 				movie.setRnum((String) obj.get("rnum"));
 				movie.setRank((String) obj.get("rank"));
-				movie.setRankInten((String) obj.get("rankInten"));  
-				movie.setRankOldAndNew((String) obj.get("rankOldAndNew"));  
-				movie.setMovieCd((String) obj.get("movieCd"));  
+				movie.setRankInten((String) obj.get("rankInten"));
+				movie.setRankOldAndNew((String) obj.get("rankOldAndNew"));
+				movie.setMovieCd((String) obj.get("movieCd"));
 				movie.setMovieNm((String) obj.get("movieNm"));
 				movie.setOpenDt((String) obj.get("openDt"));
 				movie.setSalesAmt((String) obj.get("salesAmt"));
@@ -143,7 +146,7 @@ public class MovieController {
 				movie.setAudiChange((String) obj.get("audiChange"));
 				movie.setAudiAcc((String) obj.get("audiAcc"));
 				movie.setShowCnt((String) obj.get("showCnt"));
-				
+
 //				System.out.println(moviemaindao);
 				moviemaindao.save(movie);
 				movieMain.add(movie);
@@ -163,18 +166,19 @@ public class MovieController {
 			result.put("body", "excpetion오류");
 			System.out.println(e.toString());
 		}
-		
+
 		return jsonInString;
 	}
+
 	@GetMapping("/boxoffice2")
 	public String service() {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 
 		String jsonInString = "";
-		
+
 		String urladd = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json"; // moviedetail
 		String key = "ab4da447d209d1ad3bcce6ca4e89ef03";
-		
+
 		try {
 			// RestTemplate 설정
 			// RestTemplate 이란? -> https://sjh836.tistory.com/141 참고
@@ -195,9 +199,7 @@ public class MovieController {
 
 			// 요청할 주소
 			// movie main 의 정보, 여기서 movieCd 값을 찾아 받는다
-			UriComponents uri = UriComponentsBuilder
-					.fromHttpUrl(urladd + "?key=" + key)
-					.build();
+			UriComponents uri = UriComponentsBuilder.fromHttpUrl(urladd + "?key=" + key).build();
 
 			// API를 호출해 MAP타입으로 전달 받는다.
 			// RestTemplate은 HttpClient 를 추상화(HttpEntity의 json, xml 등)해서 제공
@@ -218,25 +220,25 @@ public class MovieController {
 
 			LinkedHashMap mnList = new LinkedHashMap<>(); // K object, V object
 
-			List <MovieDetail> movieDetailList = new ArrayList<>();
+			List<MovieDetail> movieDetailList = new ArrayList<>();
 
-			for(Map obj : dboxoffList){		
+			for (Map obj : dboxoffList) {
 				MovieDetail movieDetail = new MovieDetail();
-				movieDetail.setMovieCd((String)obj.get("movieCd"));
-				movieDetail.setMovieNm((String)obj.get("movieNm"));
-				movieDetail.setMovieNmEn((String)obj.get("movieNmEn"));
-				movieDetail.setPrdtYear((String)obj.get("prdtYear"));
-				movieDetail.setOpenDt((String)obj.get("openDt"));
-				movieDetail.setPrdtStatNm((String)obj.get("prdtStatNm"));
-				movieDetail.setNationAlt((String)obj.get("nationAlt"));
-				movieDetail.setGenreAlt((String)obj.get("genreAlt"));
-				movieDetail.setRepNationNm((String)obj.get("repNationNm"));
+				movieDetail.setMovieCd((String) obj.get("movieCd"));
+				movieDetail.setMovieNm((String) obj.get("movieNm"));
+				movieDetail.setMovieNmEn((String) obj.get("movieNmEn"));
+				movieDetail.setPrdtYear((String) obj.get("prdtYear"));
+				movieDetail.setOpenDt((String) obj.get("openDt"));
+				movieDetail.setPrdtStatNm((String) obj.get("prdtStatNm"));
+				movieDetail.setNationAlt((String) obj.get("nationAlt"));
+				movieDetail.setGenreAlt((String) obj.get("genreAlt"));
+				movieDetail.setRepNationNm((String) obj.get("repNationNm"));
 //				movieDetail.setDirectors((String)obj.get("directors"));
 //				movieDetail.setCompanys((String)obj.get("companys"));
-		
+
 				moviedetaildao.save(movieDetail);
 				movieDetailList.add(movieDetail);
-				
+
 //				RepoService repo = new RepoService();
 //				repo.saveMovieDetail(movieDetail);
 			}
@@ -256,9 +258,38 @@ public class MovieController {
 			result.put("body", "excpetion오류");
 			System.out.println(e.toString());
 		}
-		
-		
-		
+
 		return jsonInString;
+	}
+
+	@GetMapping("/navermovie")
+	public String naverInfo() throws IOException {
+
+		// java코드로 특정 url에 요청보내고 응답받기
+		// 기본 자바 API를 활용한 방법
+
+		String clientID = "Xtm7O9bB47CxjhKeyiPM"; // 네이버 개발자 센터에서 발급받은 clientID입력
+		String clientSecret = "w422oQxWyG"; // 네이버 개발자 센터에서 발급받은 clientSecret입력
+		URL url = new URL("https://openapi.naver.com/v1/search/movie.json?query=?query=display=10&start=1&genre=1\""); // API
+																														// 기본정보의
+																														// 요청
+																														// url을
+																														// 복사해오고
+																														// 필수인
+																														// query를
+		// 적어줍니당!
+
+		URLConnection urlConn = url.openConnection(); // openConnection 해당 요청에 대해서 쓸 수 있는 connection 객체
+
+		urlConn.setRequestProperty("X-Naver-Client-ID", clientID);
+		urlConn.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+
+		String msg = null;
+		while ((msg = br.readLine()) != null) {
+			System.out.println(msg);
+		}
+		return msg;
 	}
 }
