@@ -1,21 +1,159 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>VVVVVIP 영화관 라운지</title>
+<script lang="javascript">
+     function checked()
+    {
+         var mtext = document.getElementById("mail");
+           //e-mail의 id값  
+           
+    var email = mtext.value;
+           //email이라는 변수에 email박스에 쓰여진 값을 대입
+    
+    var regExp2 = /[a-z0-9]{2,}@[a-z0-9-]{2,}\.[a-z0-9]{2,}/i;
+        //이메일 유효성검사
+
+    if(!regExp2.test(mail))
+            {
+        alert("제대로된 메일이 아닙니다.");
+        mtext.value="";
+        mtext.focus();
+        return false;
+            }
+    }        
+</script>
 </head>
 <body>
-이거는 매번 바뀌는 값이라 못씀<br>
-연결 키값 : <span th:text="${session['token']}"></span><br>
-이거는 항상 고유한 값일껄?<br>
-고유 키값 : <span th:text="${session['id']}"></span><br>
+    <h1 align="center">VVVVVIP 영화관 라운지</h1>
+    <h3 align="center"><span th:text="${session['id']}"></span>님</h3>
+    <h5 align="center">VVVVVIP 라운지 영화관 서비스에 오신것을 환영합니다!</h5>
+    <!-- ${session['id']}  -->
+    <form action="/signup"><!-- signup은 매핑시킬 이름으로 지어줬어요, 이제 요 html에 있는값을 homecontroller에 @RequestMapping(value="signup")방식으로 보내줘요~ -->
 
-여기서 이제 타임리프 써서 session scope에 있는 token<br>
-타임리프에서 token 치면 유저 아이디 나옴<br>
-이거를 디비 조회해서 있는 아이디면 그거로 로그인<br>
-세션에 회원정보 조회한거 추가하면 된다<br>
-없는 아이디면 최초 회원이니 회원가입폼 만들어서 디비에 넣어주고<br>
-다되면 이것도 세션에 추가 정보들<br>
-컨트롤러로 넘기면 끝
+        <table style="border-collapse:collapse; border:1px gray solid; margin:auto; ">
+            <!-- 첫줄  -->    
+                <tr>
+                    <td style="color:red" colspan="2" align = "center">원활한 서비스 제공을 위하여 아래에 추가 정보를 기입해주세요</td> 
+                </tr>
+        
+         		<tr>
+                    <td align="center" bgcolor="D5D5D5">닉네임</td>
+                    <td><input type="text" name="name" id="name" size="8" ></td>
+        		</tr>
+                <!-- 메일주소  -->
+                <tr>
+                    <td align="center" bgcolor="D5D5D5">E-ticket받으실주소</td>
+                    <td><input type="text" name="mail" id="mail" size="8" > @
+                        <select name="mail" id="mail">
+                            <option value="google.com">google.com</option>
+                            <option value="naver.com">naver.com</option>
+                            <option value="hanmail.net">hanmail.net</option>
+                            <option value="nate.com">nate.com</option>
+                            <option value="lycos.co.kr">lycos.co.kr</option>
+                           </select>
+                    </td>
+                </tr>
+              
+                <!-- 통신사 --><!--중복체크 안되게하는거 모르겠당-->
+             <!--   <tr>
+                    <td align="center" bgcolor="D5D5D5">통신사:</td>
+                    <td>
+                        <input type="checkbox" name="mobile" id="carrier"value="SK">SK
+                        <input type="checkbox" name="mobile" id="carrier" value="KT">KT
+                        <input type="checkbox" name="mobile" id="carrier" value="LG">LG
+                        <input type="checkbox" name="mobile" id="carrier" value="알뜰폰">알뜰폰
+                    </td>
+                </tr>    -->
+                <!--휴대폰번호-->
+                <tr>
+                    <td align="center" bgcolor="D5D5D5">휴대폰번호</td>
+                    <td>
+                    	<!-- <input type="text" name="pnum" id ="phone" size="4" maxlength="3"/> -  -->
+                    	<select id="phone" name="pnum">
+                        	<option value="010">010</option>
+                        	<option value="011">011</option>
+                        	<option value="017">017</option>
+                        </select>
+                        <input type="text" id="phone" name="pnum" size="9" maxlength="4"> -   
+                        <input type="text" id="phone" name="pnum" size="9" maxlength="4">
+                    </td>
+                </tr>
+                <!-- 생일 -->
+                <tr>
+                    <td align="center" bgcolor="D5D5D5">생일</td>
+                    <td><select name="year" id="year">
+                        <option value="2000">2000</option>
+                        <option value="2001">2001</option>
+                        <option value="2002">2002</option>
+                        <option value="2003">2003</option>
+                        <option value="2004">2004</option>
+                        <option value="2005">2005</option>
+                        <option value="2006">2006</option>
+                        <option value="2007">2007</option>
+                        <option value="2008">2008</option>
+                        <option value="2009">2009</option>
+                        <option value="2010">2010</option>
+                        <option value="2011">2011</option></select>년
+
+                        <select name="mon" id="mon">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        </select> 월
+                        <select name="day" id ="day">
+                            <option value="1">    1    </option>
+                            <option value="2">    2    </option>
+                            <option value="3">    3    </option>
+                            <option value="4">    4    </option>
+                            <option value="5">    5    </option>
+                            <option value="6">    6    </option>
+                            <option value="7">    7    </option>
+                            <option value="8">    8    </option>
+                            <option value="9">    9    </option>
+                            <option value="10">    10    </option>
+                            <option value="11">    11    </option>
+                            <option value="12">    12    </option>
+                            <option value="13">    13    </option>
+                            <option value="14">    14    </option>
+                            <option value="15">    15    </option>
+                            <option value="16">    16    </option>
+                            <option value="17">    17    </option>
+                            <option value="18">    18    </option>
+                            <option value="19">    19    </option>
+                            <option value="20">    20    </option>
+                            <option value="21">    21    </option>
+                            <option value="22">    23    </option>
+                            <option value="22">    24    </option>
+                            <option value="22">    25    </option>
+                            <option value="22">    26    </option>
+                            <option value="22">    27    </option> 
+                            <option value="22">    28    </option>
+                            <option value="22">    29    </option>
+                            <option value="22">    30    </option>
+                            <option value="22">    31    </option>
+                            <option value="22">    32    </option>
+                        
+                        </select>일
+                    </td>
+                    </tr>
+               
+            </table><br>
+            <div align="center">
+                <input type="submit" value="회원가입">
+                <input type="reset" value="다시입력">
+            </div>
+    </form>
 </body>
 </html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	카카오 아이디 : <span th:text="${session.membersession.kakaoId}"></span><br>
+	이름 : <span th:text="${session.membersession.name}"></span><br>
+	생일 : <span th:text="${session.membersession.birth}"></span><br>
+	전화번호 : <span th:text="${session.membersession.phone}"></span><br>
+	이메일 : <span th:text="${session.membersession.email}"></span><br>
+</body>
+</html>
