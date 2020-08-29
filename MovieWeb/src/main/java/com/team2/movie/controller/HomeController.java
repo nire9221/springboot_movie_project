@@ -113,4 +113,9 @@ public class HomeController {
     	System.out.println(seat);
     	return "seattest2";
     }
+//    @GetMapping("/Ticket")
+//    public String Ticket(@RequestParam("Ticket") String seat) {
+//    	System.out.println();
+//    	return "Ticket";
+//    }
 }
