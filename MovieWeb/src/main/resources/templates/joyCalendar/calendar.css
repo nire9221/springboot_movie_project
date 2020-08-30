@@ -1,0 +1,92 @@
+calendar{
+    float:left;
+    display:block;
+    .border-box;
+    background:white;
+    width:300px;
+    border:solid 1px #CCC;
+    margin-bottom:10px;
+}
+calendar div.header{
+    float:left;
+    width:100%;
+    height:50px;
+    background-color: #50C3A0;
+    color:white;
+}
+calendar div.header *{
+    height: 50px;
+    line-height:50px !important;
+    display:inline-block;
+    vertical-align:middle;
+} 
+calendar div.header i{
+    float:left;
+    width:40px;
+    font-size:1.125em;
+    font-weight:bold;
+    position:relative;
+    .border-box;
+    padding:0 10px;
+    cursor:pointer;
+}
+calendar div.header i.fa-angle-left {
+    text-align:left;
+}
+calendar div.header i.fa-angle-right{
+    text-align:right;
+    margin-left:-40px;
+}
+calendar div.header span{
+    float:left;
+    width:56%;
+    font-weight:bold;
+    text-transform:uppercase;
+    .border-box;
+    padding-left:50px;
+    margin-left:-40px;
+    text-align:center;
+    padding-right:40px;
+    color:inherit;
+}
+
+calendar div.week{
+    float:left;
+    width:100%;
+}
+calendar div.week span.day{
+    float:left;
+    width:14.28%;
+    .border-box;
+    border-left:solid 1px @border-colour;
+    font-size:0.75em;
+    text-align:center;
+    background:white;
+    cursor:pointer;
+    color:black;
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+    vertical-align: middle;
+
+}
+calendar div.week span.day:first-child{
+    border-left: none;
+}
+calendar div.week span.day.today{
+   background: #FFFACD;
+}
+calendar div.week span.day.different-month{
+   color:#C0C0C0;
+}
+calendar div.week span.day.yesterday{
+	background:black;
+}
+calendar div.week span.day.selected {
+    background:#50C3A0;
+    color:white;
+}
+calendar div.week.names>span {
+    color:#44A88A;
+    font-weight:bold;
+}

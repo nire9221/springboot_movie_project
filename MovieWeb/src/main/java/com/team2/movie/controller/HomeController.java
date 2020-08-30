@@ -160,4 +160,9 @@ public class HomeController {
     	model.addAttribute("select",seat);
     	return "seattest2";
     }
+//    @GetMapping("/Ticket")
+//    public String Ticket(@RequestParam("Ticket") String seat) {
+//    	System.out.println();
+//    	return "Ticket";
+//    }
 }
