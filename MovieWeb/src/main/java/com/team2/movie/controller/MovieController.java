@@ -165,99 +165,111 @@ public class MovieController {
 		
 		return jsonInString;
 	}
-	@GetMapping("/boxoffice2")
-	public String service() {
+	@GetMapping("/updateDetail")
+	public String getMovieDetail() throws Exception {
 		HashMap<String, Object> result = new HashMap<String, Object>();
-
 		String jsonInString = "";
-		
-		String urladd = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieList.json"; // moviedetail
+		String urladd = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"; // moviedetail
 		String key = "ab4da447d209d1ad3bcce6ca4e89ef03";
-		
-		try {
-			// RestTemplate 설정
-			// RestTemplate 이란? -> https://sjh836.tistory.com/141 참고
+//		MovieMain movie = new MovieMain();
+//		movieCd = movie.getMovieCd();
+		String movieCd = "20201122";
 
+		try {
 			HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
 			factory.setConnectTimeout(5000); // 연결시간 초과, 타임아웃 설정 5초
 			factory.setReadTimeout(5000);// 읽기시간초과, 타임아웃 설정 5초
 			RestTemplate restTemplate = new RestTemplate(factory);
 
-			// HttpClient는 HTTP를 사용하여 통신하는 범용 라이브러리
 			HttpClient httpClient = HttpClientBuilder.create().setMaxConnTotal(100) // connection pool 적용
-					.setMaxConnPerRoute(5) // connection pool 적용
-					.build();
+					.setMaxConnPerRoute(5).build();
 			factory.setHttpClient(httpClient); // 동기실행에 사용될 HttpClient 세팅
 
 			HttpHeaders header = new HttpHeaders(); // 헤더에 key들을 담아준다
 			HttpEntity<?> entity = new HttpEntity<>(header);
 
-			// 요청할 주소
-			// movie main 의 정보, 여기서 movieCd 값을 찾아 받는다
-			UriComponents uri = UriComponentsBuilder
-					.fromHttpUrl(urladd + "?key=" + key)
+			UriComponents uri = UriComponentsBuilder.fromHttpUrl(urladd + "?key=" + key + "&movieCd=" + movieCd)
 					.build();
 
-			// API를 호출해 MAP타입으로 전달 받는다.
-			// RestTemplate은 HttpClient 를 추상화(HttpEntity의 json, xml 등)해서 제공
-
-			// exchage : HTTP header setting 가능, ResponseEntity로 반환
-			// RequeResponseEntity -> return body obj, header obj, status code
 			ResponseEntity<Map> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Map.class);
+
 			result.put("statusCode", resultMap.getStatusCodeValue()); // http status code를 확인
 			result.put("header", resultMap.getHeaders()); // 헤더 정보 확인
 			result.put("body", resultMap.getBody()); // 실제 데이터 정보 확인
 
-//				HashMap<String, List<String>>  // 하나의 키에 여러개의 밸류
-			// LinkedHashMap 입력 순서대로 저장
-			LinkedHashMap lm = (LinkedHashMap) resultMap.getBody().get("movieListResult");
-
-			// dailybox office list 결과를 리스트로 출력, 리스트 안의 내용은 map 형식 <string 키, list 타입 value)
-			ArrayList<Map> dboxoffList = (ArrayList<Map>) lm.get("movieList");
-
+			LinkedHashMap lm = (LinkedHashMap) resultMap.getBody().get("movieInfoResult");
+			HashMap detailmap = (HashMap) lm.get("movieInfo");
 			LinkedHashMap mnList = new LinkedHashMap<>(); // K object, V object
 
-			List <MovieDetail> movieDetailList = new ArrayList<>();
+			List<MovieDetail> movieDetailList = new ArrayList<>();
 
-			for(Map obj : dboxoffList){		
-				MovieDetail movieDetail = new MovieDetail();
-				movieDetail.setMovieCd((String)obj.get("movieCd"));
-				movieDetail.setMovieNm((String)obj.get("movieNm"));
-				movieDetail.setMovieNmEn((String)obj.get("movieNmEn"));
-				movieDetail.setPrdtYear((String)obj.get("prdtYear"));
-				movieDetail.setOpenDt((String)obj.get("openDt"));
-				movieDetail.setPrdtStatNm((String)obj.get("prdtStatNm"));
-				movieDetail.setNationAlt((String)obj.get("nationAlt"));
-				movieDetail.setGenreAlt((String)obj.get("genreAlt"));
-				movieDetail.setRepNationNm((String)obj.get("repNationNm"));
-//				movieDetail.setDirectors((String)obj.get("directors"));
-//				movieDetail.setCompanys((String)obj.get("companys"));
-		
-				moviedetaildao.save(movieDetail);
-				movieDetailList.add(movieDetail);
-				
-//				RepoService repo = new RepoService();
-//				repo.saveMovieDetail(movieDetail);
+			System.out.println("detailmap: " + detailmap);
+
+			MovieDetail movieDetail = new MovieDetail();
+			movieDetail.setMovieCd((String) detailmap.get("movieCd"));
+			movieDetail.setMovieNm((String) detailmap.get("movieNm"));
+			movieDetail.setMovieNmEn((String) detailmap.get("movieNmEn"));
+			movieDetail.setMovieNmOg((String) detailmap.get("movieNmog"));
+			movieDetail.setPrdtYear((String) detailmap.get("prdtYear"));
+			movieDetail.setShowTm((String) detailmap.get("showTm"));
+			movieDetail.setOpenDt((String) detailmap.get("openDt"));
+			movieDetail.setPrdtStatNm((String) detailmap.get("prdtStatNm"));
+			movieDetail.setTypeNm((String) detailmap.get("typeNm"));
+//			movieDetail.setNations((ArrayList<Map>) detailmap.get("nations"));
+//			movieDetail.setNations((ArrayList<Map>) detailmap.get("actors"));
+//			movieDetail.setNations((ArrayList<Map>) detailmap.get("companys"));
+//			movieDetail.setNations((ArrayList<Map>) detailmap.get("directors"));
+//			movieDetail.setNations((ArrayList<Map>) detailmap.get("audits"));
+			ArrayList<Map> nmap = (ArrayList<Map>) detailmap.get("nations");
+			for (int i=0;i<nmap.size();i++) {
+				Map<String,String> nnmap = nmap.get(i);
+				String nation = (String) nnmap.get("nationNm");
+				System.out.println(nation);
+				System.out.println("nation : "+nnmap.get("nationNm"));
 			}
-			System.out.println(movieDetailList);
+			ArrayList<Map> amap = (ArrayList<Map>) detailmap.get("actors");
+			for (int i=0;i<amap.size();i++) {
+				Map<String,String> aamap = amap.get(i);
+				String actorname = (String) aamap.get("peopleNm");
+				System.out.println(actorname);
+				System.out.println("actor name : "+aamap.get("peopleNm")+" ename : "+aamap.get("peopleNmEn")+" cast : "+aamap.get("cast")+" castEn : "+aamap.get("castEn"));
+			}
+			ArrayList<Map> cmap = (ArrayList<Map>) detailmap.get("companys");
+			for (int i=0;i<cmap.size();i++) {
+				Map<String,String> ccmap = cmap.get(i);
+				System.out.println("company cd : "+ccmap.get("companyCd")+" name : "+ccmap.get("companyNm")+" ename : "+ccmap.get("companyNmEn")+" partname : "+ccmap.get("companyPartNm"));
+			}
+			ArrayList<Map> dmap = (ArrayList<Map>) detailmap.get("directors");
+			for (int i=0;i<dmap.size();i++) {
+				Map<String,String> ddmap = dmap.get(i);
+				System.out.println("director name : "+ddmap.get("peopleNm")+" ename : "+ddmap.get("peopleNmEn"));
+			}
+			ArrayList<Map> umap = (ArrayList<Map>) detailmap.get("audits");
+			for (int i=0;i<umap.size();i++) {
+				Map<String,String> uumap = umap.get(i);
+				System.out.println("audit num : "+uumap.get("auditNo")+" grade : "+uumap.get("watchGradeNm"));
+			}
+			
+//			moviedetaildao.save(movieDetail);
+//			movieDetailList.add(movieDetail);
+//			}
 
-//			// 데이터를 제대로 전달 받았는지 확인 string형태로 파싱해줌 object to json
 			ObjectMapper mapper = new ObjectMapper();
 			jsonInString = mapper.writeValueAsString(mnList);
 
 		} catch (HttpClientErrorException | HttpServerErrorException e) {
 			result.put("statusCode", e.getRawStatusCode());
 			result.put("body", e.getStatusText());
+			e.printStackTrace();
 			System.out.println(e.toString());
 
 		} catch (Exception e) {
 			result.put("statusCode", "999");
 			result.put("body", "excpetion오류");
+			e.printStackTrace();
 			System.out.println(e.toString());
 		}
-		
-		
-		
+
 		return jsonInString;
 	}
 }

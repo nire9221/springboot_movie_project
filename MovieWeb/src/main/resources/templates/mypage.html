@@ -10,5 +10,11 @@
 	생일 : <span th:text="${session.membersession.birth}"></span><br>
 	전화번호 : <span th:text="${session.membersession.phone}"></span><br>
 	이메일 : <span th:text="${session.membersession.email}"></span><br>
+	<form action="/" method="post">
+		<input type="submit" value="mainpage">
+	</form>
+	<form action="/logout" method="post">
+		<input type="submit" value="logout">
+	</form>
 </body>
 </html>

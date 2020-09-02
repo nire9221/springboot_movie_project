@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <meta name="viewport"
@@ -36,6 +36,19 @@
 <link href="album.css" rel="stylesheet">
 </head>
 <body>
+	<div th:if="${session.membersession!=null}">
+		<form action="/logout" method="post">
+			<input type="submit" value="logout">
+		</form>
+		<form action="/mypage">
+			<input type="submit" value="mypage">
+		</form>
+	</div>
+	<div th:if="${session.membersession==null}">
+		<form action="/login" method="post">
+			<input type="submit" value="login">
+		</form>
+	</div>
 	<header>
 		<div class="collapse bg-dark" id="navbarHeader">
 			<div class="container">
