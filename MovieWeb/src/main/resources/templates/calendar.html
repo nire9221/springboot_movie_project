@@ -6,16 +6,38 @@
 <html>
 
 <style>
-.ui-datepicker-week-end {color:red;} <!-- 주말 글씨색 붉은색 처리 -->
-.ui-datepicker-week-end.ui-state-default{color:red;} <!-- 주말 칸들 붉은색 처 -->
+.ui-datepicker-week-end {
+	color: red;
+}
 
+<!--
+주말 글씨색 붉은색 처리 -->.ui-datepicker-week-end.ui-state-default {
+	color: red;
+}
 
+<!--
+주말 칸들 붉은색 처 -->body {
+	padding: 5px;
+	font-family: Arial;
+}
 
+.ui-datepicker {
+	background-color: #fff;
+}
+
+.ui-datepicker-header {
+	background-color: #616eff;
+}
+
+.ui-datepicker-title {
+	color: white;
+}
 </style>
 
 <head>
 <meta charset="UTF-8">
 <title>calendar</title>
+
 <!-- jQuery UI CSS파일  -->
 <link rel="stylesheet"
 	href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css"
@@ -27,14 +49,17 @@
 <script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
 </head>
 <body>
+
 	<script>
 		$(function() {
 			$("#testDatepicker").datepicker({
+				
 				minDate: 0 <!-- 오늘 이전의 날은 disable -->
 
 			});
 		});
 	</script>
 	<input type="text" id="testDatepicker">
+	<div id="calendar"></div>
 </body>
 </html>
