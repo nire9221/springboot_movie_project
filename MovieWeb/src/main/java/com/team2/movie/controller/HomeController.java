@@ -1,5 +1,7 @@
 package com.team2.movie.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.team2.movie.dao.api.MovieDetailDao;
+import com.team2.movie.dao.api.MovieMainDao;
+import com.team2.movie.dao.dto.MovieDetail;
+import com.team2.movie.dao.dto.MovieMain;
 import com.team2.movie.services.KakaoPay;
 
 import lombok.Setter;
@@ -19,8 +25,21 @@ import lombok.extern.java.Log;
 @Log
 @Controller
 public class HomeController {
+	
+	@Autowired
+	MovieMainDao movieMainDao;
+	
+	@Autowired
+	MovieDetailDao movieDetailDao;
+	
+	//get all movieList
 	@GetMapping("/")
-	public String main() {
+	public String movieMain(Model model){ 
+		List<MovieMain> movieList = movieMainDao.findAll();
+		List<MovieDetail> movieDetailList = movieDetailDao.findAll();
+		model.addAttribute("movieList",movieList);
+		model.addAttribute("movieDetail",movieDetailList);
+		
 		return "main";
 	}
 	

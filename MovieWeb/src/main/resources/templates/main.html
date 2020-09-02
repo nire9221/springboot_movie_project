@@ -84,25 +84,22 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 						<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
 						<circle cx="12" cy="13" r="4" /></svg> 
 						<strong>Zoo Cinema</strong>
+						<!-- <div id="ranking"></div> -->
 				</a>
 				
-				<!-- 로그인 전 -->
-		<!-- 		 <div th:unless="${#authorization.expr('isAuthenticated()')}" class="btn-group">
-        			<a th:href="@{/home}" class="btn btn-dark" aria-controls="navbarHeader">Login</a>
-        			<a th:href="@{/signup}" class="btn btn-dark" aria-controls="navbarHeader">Sign in</a>
-    			</div> -->
-				
-				<div sec:authorize="isAnonymous()" class="btn-group">
-					<a th:href="@{/home}" class="btn btn-dark" aria-controls="navbarHeader">Login</a>
-					<a th:href="@{/signup}" class="btn btn-dark" aria-controls="navbarHeader">Sign in</a>
+				<div th:if="${session.membersession!=null}" class="btn-group">
+					<form action="/logout" method="post">
+						<input type="submit" value="logout" class="btn">
+					</form>
+    			<form action="/mypage">
+					<input type="submit" class="btn btn-secondary" value="mypage">
+      				</form>
 				</div>
-				
-				<!-- 로그인 후 -->
-	<!-- 			<div th:if="${#authorization.expr('isAuthenticated()')}" class="btn-group">
-					<p th:text="${#authentication.name}">님 환영합니다</p>
-					<a th:href="@{/myinfo}" class="btn btn-dark" aria-controls="navbarHeader">회원정보</a>
-					<a href="/logout" th:href="@{/logout}" class="btn btn-dark" aria-controls="navbarHeader">Logout</a>
-				</div> -->
+   				<div th:if="${session.membersession==null}">
+      				<form action="/login" method="post" class="btn">
+         			<input type="submit" class="btn btn-secondary" value="login">
+      			</form>
+   				</div> 
 	
 			</div>
 		</div>
@@ -110,73 +107,62 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <!-- main start -->
 <main role="main">
-	<!-- 영화정보 페이지 -->
-	<div class="album py-5 bg-light">
-		<div class="container">		
-			<div class="row">
 
+<!-- 영화정보 페이지 -->
+<div class="album py-5 bg-light">
+	<div class="container">		
+		<div class="row">
 <!-------------------------- box1 -------------------------->
-<div class="col-md-4">
-	<div class="card mb-4 shadow-sm">
-<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
-		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
-			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
-		<title>여긴뭐지?</title>
-		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
-		 <text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
+			<div class="col-md-4"  th:each="movieList,index: ${movieList}">
+				<div class="card mb-4 shadow-sm" id="movieResult" th:if="${index.index}<3">
+ 				<img th:src="${movieList.image}" class="card-img-top" width="50%" height="350" alt="thumbnail"/> 
+		 		<p id="getMovieInfo" th:text="${movieList.movieNm}" x="50%" y="90%" fill="#eceeef" dy=".3em"></p>
 		
-	<div class="card-body">
-	<!--<p class="card-text">add movie detail</p>  -->
-		<div class="d-flex justify-content-between align-items-center">
-			<div class="btn-group">
-				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail1">상세보기</button>
-				<a th:href="@{/seatselect}" class="btn btn-outline-warning ">예매하기</a>
+			<div class="card-body">
+				<div class="d-flex justify-content-between align-items-center">
+				<div class="btn-group">
+					<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail1">상세보기</button>
+					<a id="bookBtn" th:href="@{/seatselect}" class="btn btn-outline-warning ">예매하기</a>
+				</div>
+				</div>
 			</div>
-			<small class="text-muted">예매율 ?? </small>
+				</div>
+			</div>
 		</div>
-	</div>
-		
-	</div>
-</div>
-
 
 <!--  modal -->
-<div id="detail1" class="modal fade" >
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+<div th:id="detail1" class="modal fade">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" >
     <!-- modal content -->
-      <div class="modal-content">
-      
-        <div class="modal-header">
-        	<h4 class="modal-title">Movier</h4>
+      <div class="modal-content"  >
+        <div class="modal-header"  >
+        	<h4 class="modal-title">title</h4>
         	<button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
         <div class="modal-body">
         	<div class="container-fluid">
         	 	<div class="row">
-      				<div class="col-sm-9"> head
+      				<div class="col-sm-9 trailer"> 
         				<div class="row">
-        					<div class="col-8 col-sm-6"> trailer
+        					<div class="col-8 col-sm-6"> 
         						<div class="embed-responsive embed-responsive-16by9">
-  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+  									<iframe src="" class="embed-responsive-item" allowfullscreen></iframe>
 								</div>
         					</div>
-							<div class="col-4 col-sm-6"> description</div>
+							<div class="col-4 col-sm-6 description"> </div>
         				</div>
       				</div>
     			</div>
-    			<button type="button" class="btn btn-primary float-right">예매하기</button>
+    			<button id="bookBtn" th:href="@{/seatselect}" type="button" class="btn btn-primary float-right">예매하기</button>
         	<br> 
-    	 		<div class="row">
-    	 			<div class="col-sm-9"> casting</div>
-    	 		</div>
-    	
-    			<div class="row">
-      				<div class="col-md-6 ml-auto">1111</div>
-      				<div class="col-md-6 ml-auto">222</div>
-      				<div class="col-md-6 ml-auto">3333</div>
-      				<div class="col-md-6 ml-auto">4444</div>
-    			</div> 
+    	<!-- 		<div class="row" th:each="movieDetail,index: ${movieDetail}" th:if="${index.index}<1">
+      				상영시간 : <div class="col-md-6 ml-auto" th:text="${movieDetail.showTm}"> </div>
+      				개봉일 : <div class="col-md-6 ml-auto" th:text="${movieDetail.openDt}"> </div>
+	      			상영등급 : <div class="col-md-6 ml-auto" th:text="${movieDetail.watchGradeNm}"> </div>
+	      			감독 : <div class="col-md-6 ml-auto" th:text="${movieDetail.directorNm}"> </div>
+	      			배우 : <div class="col-md-6 ml-auto" th:text="${movieDetail.actorNm}"> </div>
+    			</div>  -->
     		</div> 
     	
         </div> <!-- modal body end -->
@@ -187,447 +173,19 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
             	<label for="message-text" class="col-form-label">Comment:</label>
             	<textarea class="form-control" id="message-text"></textarea>
 				<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
-          	</div>
+          	</div>   
 <br>
 			<div class="modal-footer">
         		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       		</div>
     	</form>
-        
-      </div>
-    </div>
-  </div>
-
-
-
-
-
-<!-------------------------- box2 -------------------------->
-<div class="col-md-4">
-	<div class="card mb-4 shadow-sm">
-		
-<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
-		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
-			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
-		<title>여긴뭐지?</title>
-		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
-		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
-		
-	<div class="card-body">
-	<!--<p class="card-text">add movie detail</p>  -->
-		<div class="d-flex justify-content-between align-items-center">
-			<div class="btn-group">
-				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail2">상세보기</button>
-				<a th:href="@{/templates/seatselect}" class="btn btn-outline-warning ">예매하기</a>
-			</div>
-			<small class="text-muted">예매율 ?? </small>
-		</div>
-	</div>
-		
+      	</div>
 	</div>
 </div>
 
-
-<!--  modal -->
-<div id="detail2" class="modal fade" >
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <!-- modal content -->
-      <div class="modal-content">
-      
-        <div class="modal-header">
-        	<h4 class="modal-title">Movier</h4>
-        	<button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <div class="modal-body">
-        	<div class="container-fluid">
-        	 	<div class="row">
-      				<div class="col-sm-9"> head
-        				<div class="row">
-        					<div class="col-8 col-sm-6"> trailer
-        						<div class="embed-responsive embed-responsive-16by9">
-  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
-								</div>
-        					</div>
-							<div class="col-4 col-sm-6"> description</div>
-        				</div>
-      				</div>
-    			</div>
-    			<button type="button" class="btn btn-primary float-right">예매하기</button>
-        	<br> 
-    	 		<div class="row">
-    	 			<div class="col-sm-9"> casting</div>
-    	 		</div>
-    	
-    			<div class="row">
-      				<div class="col-md-6 ml-auto">1111</div>
-      				<div class="col-md-6 ml-auto">222</div>
-      				<div class="col-md-6 ml-auto">3333</div>
-      				<div class="col-md-6 ml-auto">4444</div>
-    			</div> 
-    		</div> 
-    	
-        </div> <!-- modal body end -->
-        
-        <!-- comment  -->
-     	<form>
-			<div class="form-group">
-            	<label for="message-text" class="col-form-label">Comment:</label>
-            	<textarea class="form-control" id="message-text"></textarea>
-            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
-          	</div>
-<br>
-			<div class="modal-footer">
-        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      		</div>
-    	</form>
-        
-      </div>
-    </div>
-  </div>
-  
-  
-<!-------------------------- box3 -------------------------->
-<div class="col-md-4">
-	<div class="card mb-4 shadow-sm">
-		
-<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
-		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
-			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
-		<title>여긴뭐지?</title>
-		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
-		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
-		
-	<div class="card-body">
-	<!--<p class="card-text">add movie detail</p>  -->
-		<div class="d-flex justify-content-between align-items-center">
-			<div class="btn-group">
-				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail3">상세보기</button>
-				<a href="templates/seatselect.html" class="btn btn-outline-warning ">예매하기</a>
-			</div>
-			<small class="text-muted">예매율 ?? </small>
-		</div>
-	</div>
-		
-	</div>
+   <!--row end-->
+	</div> 
 </div>
-
-
-<!--  modal -->
-<div id="detail3" class="modal fade" >
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <!-- modal content -->
-      <div class="modal-content">
-      
-        <div class="modal-header">
-        	<h4 class="modal-title">Movier</h4>
-        	<button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <div class="modal-body">
-        	<div class="container-fluid">
-        	 	<div class="row">
-      				<div class="col-sm-9"> head
-        				<div class="row">
-        					<div class="col-8 col-sm-6"> trailer
-        						<div class="embed-responsive embed-responsive-16by9">
-  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
-								</div>
-        					</div>
-							<div class="col-4 col-sm-6"> description</div>
-        				</div>
-      				</div>
-    			</div>
-    			<button type="button" class="btn btn-primary float-right">예매하기</button>
-        	<br> 
-    	 		<div class="row">
-    	 			<div class="col-sm-9"> casting</div>
-    	 		</div>
-    	
-    			<div class="row">
-      				<div class="col-md-6 ml-auto">1111</div>
-      				<div class="col-md-6 ml-auto">222</div>
-      				<div class="col-md-6 ml-auto">3333</div>
-      				<div class="col-md-6 ml-auto">4444</div>
-    			</div> 
-    		</div> 
-    	
-        </div> <!-- modal body end -->
-        
-        <!-- comment  -->
-     	<form>
-			<div class="form-group">
-            	<label for="message-text" class="col-form-label">Comment:</label>
-            	<textarea class="form-control" id="message-text"></textarea>
-            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
-          	</div>
-<br>
-			<div class="modal-footer">
-        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      		</div>
-    	</form>
-        
-      </div>
-    </div>
-  </div>
-  
-  
-<!-------------------------- box4 -------------------------->
-<div class="col-md-4">
-	<div class="card mb-4 shadow-sm">
-<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
-		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
-			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
-		<title>여긴뭐지?</title>
-		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
-		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
-		
-	<div class="card-body">
-	<!--<p class="card-text">add movie detail</p>  -->
-		<div class="d-flex justify-content-between align-items-center">
-			<div class="btn-group">
-				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail4">상세보기</button>
-				<a href="templates/seatselect.html" class="btn btn-outline-warning ">예매하기</a>
-			</div>
-			<small class="text-muted">예매율 ?? </small>
-		</div>
-	</div>
-		
-	</div>
-</div>
-
-
-<!--  modal -->
-<div id="detail4" class="modal fade" >
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <!-- modal content -->
-      <div class="modal-content">
-      
-        <div class="modal-header">
-        	<h4 class="modal-title">Movier</h4>
-        	<button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <div class="modal-body">
-        	<div class="container-fluid">
-        	 	<div class="row">
-      				<div class="col-sm-9"> head
-        				<div class="row">
-        					<div class="col-8 col-sm-6"> trailer
-        						<div class="embed-responsive embed-responsive-16by9">
-  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
-								</div>
-        					</div>
-							<div class="col-4 col-sm-6"> description</div>
-        				</div>
-      				</div>
-    			</div>
-    			<button type="button" class="btn btn-primary float-right">예매하기</button>
-        	<br> 
-    	 		<div class="row">
-    	 			<div class="col-sm-9"> casting</div>
-    	 		</div>
-    	
-    			<div class="row">
-      				<div class="col-md-6 ml-auto">1111</div>
-      				<div class="col-md-6 ml-auto">222</div>
-      				<div class="col-md-6 ml-auto">3333</div>
-      				<div class="col-md-6 ml-auto">4444</div>
-    			</div> 
-    		</div> 
-    	
-        </div> <!-- modal body end -->
-        
-        <!-- comment  -->
-     	<form>
-			<div class="form-group">
-            	<label for="message-text" class="col-form-label">Comment:</label>
-            	<textarea class="form-control" id="message-text"></textarea>
-            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
-          	</div>
-<br>
-			<div class="modal-footer">
-        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      		</div>
-    	</form>
-        
-      </div>
-    </div>
-  </div>    
-
-<!-------------------------- box5 -------------------------->
-<div class="col-md-4">
-	<div class="card mb-4 shadow-sm">
-		
-<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
-		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
-			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
-		<title>여긴뭐지?</title>
-		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
-		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
-		
-	<div class="card-body">
-	<!--<p class="card-text">add movie detail</p>  -->
-		<div class="d-flex justify-content-between align-items-center">
-			<div class="btn-group">
-				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail5">상세보기</button>
-				<a href="templates/seatselect.html" class="btn btn-outline-warning ">예매하기</a>
-			</div>
-			<small class="text-muted">예매율 ?? </small>
-		</div>
-	</div>
-		
-	</div>
-</div>
-
-
-<!--  modal -->
-<div id="detail5" class="modal fade" >
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <!-- modal content -->
-      <div class="modal-content">
-      
-        <div class="modal-header">
-        	<h4 class="modal-title">Movier</h4>
-        	<button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <div class="modal-body">
-        	<div class="container-fluid">
-        	 	<div class="row">
-      				<div class="col-sm-9"> head
-        				<div class="row">
-        					<div class="col-8 col-sm-6"> trailer
-        						<div class="embed-responsive embed-responsive-16by9">
-  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
-								</div>
-        					</div>
-							<div class="col-4 col-sm-6"> description</div>
-        				</div>
-      				</div>
-    			</div>
-    			<button type="button" class="btn btn-primary float-right">예매하기</button>
-        	<br> 
-    	 		<div class="row">
-    	 			<div class="col-sm-9"> casting</div>
-    	 		</div>
-    	
-    			<div class="row">
-      				<div class="col-md-6 ml-auto">1111</div>
-      				<div class="col-md-6 ml-auto">222</div>
-      				<div class="col-md-6 ml-auto">3333</div>
-      				<div class="col-md-6 ml-auto">4444</div>
-    			</div> 
-    		</div> 
-    	
-        </div> <!-- modal body end -->
-        
-        <!-- comment  -->
-     	<form>
-			<div class="form-group">
-            	<label for="message-text" class="col-form-label">Comment:</label>
-            	<textarea class="form-control" id="message-text"></textarea>
-            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
-          	</div>
-<br>
-			<div class="modal-footer">
-        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      		</div>
-    	</form>
-        
-      </div>
-    </div>
-  </div>
-
-			
-<!-------------------------- box6 -------------------------->
-<div class="col-md-4">
-	<div class="card mb-4 shadow-sm">
-		
-<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
-		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
-			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
-		<title>여긴뭐지?</title>
-		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
-		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
-		
-	<div class="card-body">
-	<!--<p class="card-text">add movie detail</p>  -->
-		<div class="d-flex justify-content-between align-items-center">
-			<div class="btn-group">
-				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail6">상세보기</button>
-				<a href="templates/seatselect.html" class="btn btn-outline-warning ">예매하기</a>
-			</div>
-			<small class="text-muted">예매율 ?? </small>
-		</div>
-	</div>
-		
-	</div>
-</div>
-
-
-<!--  modal -->
-<div id="detail6" class="modal fade" >
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <!-- modal content -->
-      <div class="modal-content">
-      
-        <div class="modal-header">
-        	<h4 class="modal-title">Movier</h4>
-        	<button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <div class="modal-body">
-        	<div class="container-fluid">
-        	 	<div class="row">
-      				<div class="col-sm-9"> head
-        				<div class="row">
-        					<div class="col-8 col-sm-6"> trailer
-        						<div class="embed-responsive embed-responsive-16by9">
-  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
-								</div>
-        					</div>
-							<div class="col-4 col-sm-6"> description</div>
-        				</div>
-      				</div>
-    			</div>
-    			<button type="button" class="btn btn-primary float-right">예매하기</button>
-        	<br> 
-    	 		<div class="row">
-    	 			<div class="col-sm-9"> casting</div>
-    	 		</div>
-    	
-    			<div class="row">
-      				<div class="col-md-6 ml-auto">1111</div>
-      				<div class="col-md-6 ml-auto">222</div>
-      				<div class="col-md-6 ml-auto">3333</div>
-      				<div class="col-md-6 ml-auto">4444</div>
-    			</div> 
-    		</div> 
-    	
-        </div> <!-- modal body end -->
-        
-        <!-- comment  -->
-     	<form>
-			<div class="form-group">
-            	<label for="message-text" class="col-form-label">Comment:</label>
-            	<textarea class="form-control" id="message-text"></textarea>
-            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
-          	</div>
-<br>
-			<div class="modal-footer">
-        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      		</div>
-    	</form>
-        
-      </div>
-    </div>
-  </div>
-  
- <!-- box end --> 			
-		</div>
-	</div>
-</div> 
 	
 
 <!-- 박스오피스 -->
@@ -642,9 +200,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
   		</ol>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img class="d-block w-100" src="..." alt="First slide">
+      <img class="d-block w-100" src="https://blog.kakaocdn.net/dn/kKkvU/btqGNDQfLvj/pyR6Pz86HE4UidU7qe9cM0/img.jpg" alt="kingsMan3">
         <div class="carousel-caption d-none d-md-block">
-	      	<h1>박스오피스 자리</h1>
 			<p> 
 				<a href="#" class="btn btn-primary my-2">상세보기</a> 
 				<a href="#" class="btn btn-secondary my-2">예고편 보기</a>
@@ -653,9 +210,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     </div>
     
     <div class="carousel-item">
-      <img class="d-block w-100" src="..." alt="Second slide">
+      <img class="d-block w-100" src="https://blog.kakaocdn.net/dn/dhmkQY/btqGIqc3N4M/k5xl6PODp5k8UGSOuAuFSK/img.jpg" alt="Mulan">
         <div class="carousel-caption d-none d-md-block">
-	      	<h1>박스오피스 자리</h1>
 			<p> 
 				<a href="#" class="btn btn-primary my-2">상세보기</a> 
 				<a href="#" class="btn btn-secondary my-2">예고편 보기</a>
@@ -664,9 +220,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     </div>
     
     <div class="carousel-item">
-      <img class="d-block w-100" src="..." alt="Third slide">
+      <img class="d-block w-100" src="https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/6wHY/image/R5_GzilI6ySfCn-VS6zSfzPcpZE.jpg" alt="conjuring3">
         <div class="carousel-caption d-none d-md-block">
-	      	<h1>박스오피스 자리</h1>
 			<p> 
 				<a href="#" class="btn btn-primary my-2">상세보기</a> 
 				<a href="#" class="btn btn-secondary my-2">예고편 보기</a>
@@ -729,7 +284,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 </div>
 </div>
 	
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <script src="../../assets/js/vendor/popper.min.js"></script>
 <script src="../../dist/js/bootstrap.min.js"></script>
@@ -737,16 +292,43 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-/* $('#myCarousel').on('slide.bs.carousel', function () {
-	  // do something…
-}) */
 
+<script>
 $('.carousel').carousel({
   interval: 4000
 })
 
+/*----------------------------youtube----------------------------*/
+function getVideo() {
+	var keyword = "테넷 트레일러 ";
+    $.ajax({
+      type: 'GET',
+      url: 'https://www.googleapis.com/youtube/v3/search',
+      data: {
+          key: 'AIzaSyA7RSMS9VIAwIriOxRmXUrZ6_lnwB_Bg5c',
+          q: keyword, //$("mvList.movieNm").val() //"테넷 트레일러" set keyword 
+          part: 'snippet',
+          maxResults: 1,
+          type: 'video',
+          videoEmbeddable: true,
+      },
+      success: function(data){
+          embedVideo(data)
+      },
+      error: function(response){
+          console.log("Request Failed");
+      }
+    });
+  }
+function embedVideo(data) {
+    $('iframe').attr('src', 'https://www.youtube.com/embed/' + data.items[0].id.videoId)
+    /* $('.trailer').text(data.items[0].snippet.title) */
+    $('.description').text(data.items[0].snippet.description)
+}
 
+getVideo();
+//참고 : https://dev.to/aveb/making-your-first-get-request-to-youtube-search-api-4c2f
 </script>
+
 </html>
 
