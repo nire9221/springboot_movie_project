@@ -2,6 +2,7 @@
 <html 
 xmlns:th="http://www.thymeleaf.org" 
 xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -73,6 +74,19 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 </style>
 </head>
 <body>
+	<div th:if="${session.membersession!=null}">
+		<form action="/logout" method="post">
+			<input type="submit" value="logout">
+		</form>
+		<form action="/mypage">
+			<input type="submit" value="mypage">
+		</form>
+	</div>
+	<div th:if="${session.membersession==null}">
+		<form action="/login" method="post">
+			<input type="submit" value="login">
+		</form>
+	</div>
 	<header>
 		<div class="navbar navbar-dark bg-dark shadow-sm">
 			<div class="container d-flex justify-content-between">

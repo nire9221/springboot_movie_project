@@ -30,13 +30,25 @@ public class HomeController {
 	MemberDao memberdao;
 	
 	@GetMapping("/")
-	public String main(HttpSession session) {
+	public String main() {
 		return "main";
 	}
 	
-	@RequestMapping(value = "/home")
-	public String mainPage() {
+	@PostMapping("/")
+	public String main2() {
+		return "main";
+	}
+	
+	
+	@RequestMapping(value = "/login")
+	public String loginPage() {
 		return "home";
+	}
+	
+	@PostMapping("/logout")
+	public String logoutPage(HttpSession session) {
+		session.invalidate();
+		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/oauth", produces = "application/json")
@@ -60,7 +72,7 @@ public class HomeController {
 			System.out.println("회원인 경우");
 			System.out.println(memberdao.getOne(session.getAttribute("id").toString()));
 			session.setAttribute("membersession", memberdao.getOne(session.getAttribute("id").toString()));
-			return "main";
+			return "redirect:/";
 		}
 		
 		return "signup";
@@ -99,34 +111,28 @@ public class HomeController {
 		memberdao.save(member);
 		System.out.println(member);
 		session.setAttribute("membersession",member);
-		return "main";
+		return "redirect:/";
 	}
 	
 	@GetMapping("/mypage")
-	public String mypage(HttpSession session) {
-		System.out.println(session.getAttribute("membersession"));
+	public String mypage() {
 		return "mypage";
 	}
 //////////////////////////////////////////////////////////	
 	
 	@Setter(onMethod_ = @Autowired)
-    private KakaoPay kakaopay;
-    
+    private KakaoPay kakaopay;    
 	
 	@GetMapping("/testpay")
 	public String test() {
 		return "kakaopay";
 	}
     
-//    @GetMapping("/kakaoPay")
-//    public void kakaoPayGet() {
-//        
-//    }
-    
     @PostMapping("/kakaoPay")
-    public String kakaoPay() {
+    public String kakaoPay(@RequestParam("seat") String seat) {
         log.info("kakaoPay post............................................");
         System.out.println("여기로 오겠지");
+        System.out.println(seat);
         return "redirect:" + kakaopay.kakaoPayReady();
         //return "kakaopay.kakaoPayReady()";
     }

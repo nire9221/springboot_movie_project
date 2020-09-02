@@ -41,51 +41,51 @@ class WebConnection2{
 	}
 }
 
-public class MovieDetailJson {
-	public static void main(String[] args) throws Exception {
-		WebConnection2 wc = new WebConnection2();
-		
-		String json = wc.json;
-		
-		JSONParser parser = new JSONParser();
-		JSONObject obj = (JSONObject)parser.parse(json);
-		JSONObject channel = (JSONObject)obj.get("movieListResult");
-		JSONArray item = (JSONArray)channel.get("movieList");
-		
-		List <MovieDetail> movieDetailList = new ArrayList<>();
-
-		for(int i=0;i<item.size();i++){
-			JSONObject tmp = (JSONObject)item.get(i);
-			String movieCd = (String)tmp.get("movieCd");
-			String movieNm = (String)tmp.get("movieNm");
-			String movieNmEn = (String)tmp.get("movieNmEn");
-			String prdtYear = (String)tmp.get("prdtYear");
-			String openDt = (String)tmp.get("openDt");
-			String prdtStatNm = (String)tmp.get("prdtStatNm");
-			String nationAlt = (String)tmp.get("nationAlt");
-			String genreAlt = (String)tmp.get("genreAlt");
-			String repNationNm = (String)tmp.get("repNationNm");
-//			String directors = (String)tmp.get("directors");
-//			String companys = (String)tmp.get("companys");
-			
-			MovieDetail movieDetail = new MovieDetail();
-			movieDetail.setMovieCd(movieCd);
-			movieDetail.setMovieNm(movieNmEn);
-			movieDetail.setMovieNmEn(movieNmEn);
-			movieDetail.setPrdtYear(prdtYear);
-			movieDetail.setOpenDt(openDt);
-			movieDetail.setPrdtStatNm(prdtStatNm);
-			movieDetail.setNationAlt(nationAlt);
-			movieDetail.setGenreAlt(genreAlt);
-			movieDetail.setRepNationNm(repNationNm);
-//			movieDetail.setDirectors(directors);
-//			movieDetail.setCompanys(companys);
-	
-			movieDetailList.add(movieDetail);
-
-		}
-	}
-} //http://blog.naver.com/occidere/220799351272
+//public class MovieDetailJson {
+//	public static void main(String[] args) throws Exception {
+//		WebConnection2 wc = new WebConnection2();
+//		
+//		String json = wc.json;
+//		
+//		JSONParser parser = new JSONParser();
+//		JSONObject obj = (JSONObject)parser.parse(json);
+//		JSONObject channel = (JSONObject)obj.get("movieListResult");
+//		JSONArray item = (JSONArray)channel.get("movieList");
+//		
+//		List <MovieDetail> movieDetailList = new ArrayList<>();
+//
+//		for(int i=0;i<item.size();i++){
+//			JSONObject tmp = (JSONObject)item.get(i);
+//			String movieCd = (String)tmp.get("movieCd");
+//			String movieNm = (String)tmp.get("movieNm");
+//			String movieNmEn = (String)tmp.get("movieNmEn");
+//			String prdtYear = (String)tmp.get("prdtYear");
+//			String openDt = (String)tmp.get("openDt");
+//			String prdtStatNm = (String)tmp.get("prdtStatNm");
+//			String nationAlt = (String)tmp.get("nationAlt");
+//			String genreAlt = (String)tmp.get("genreAlt");
+//			String repNationNm = (String)tmp.get("repNationNm");
+////			String directors = (String)tmp.get("directors");
+////			String companys = (String)tmp.get("companys");
+//			
+//			MovieDetail movieDetail = new MovieDetail();
+//			movieDetail.setMovieCd(movieCd);
+//			movieDetail.setMovieNm(movieNmEn);
+//			movieDetail.setMovieNmEn(movieNmEn);
+//			movieDetail.setPrdtYear(prdtYear);
+//			movieDetail.setOpenDt(openDt);
+//			movieDetail.setPrdtStatNm(prdtStatNm);
+//			movieDetail.setNationAlt(nationAlt);
+//			movieDetail.setGenreAlt(genreAlt);
+//			movieDetail.setRepNationNm(repNationNm);
+////			movieDetail.setDirectors(directors);
+////			movieDetail.setCompanys(companys);
+//	
+//			movieDetailList.add(movieDetail);
+//
+//		}
+//	}
+//} //http://blog.naver.com/occidere/220799351272
 
 
 
