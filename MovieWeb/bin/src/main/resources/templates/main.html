@@ -1,20 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html 
+xmlns:th="http://www.thymeleaf.org" 
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author"
-	content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-<meta name="generator" content="Jekyll v4.1.1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="zoo cinema movie web springboot">
 <title>Zoo Cinema</title>
-
-<link rel="canonical"
-	href="https://getbootstrap.com/docs/4.5/examples/album/">
-
+<link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/album/">
 <!-- Bootstrap core CSS -->
 <link href="../resources/css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="album.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
 .bd-placeholder-img {
@@ -31,34 +29,51 @@
 		font-size: 3.5rem;
 	}
 }
+
+<!--social button-->
+.fa {
+  padding: 20px;
+  font-size: 30px;
+  width: 30px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  border-radius: 50%;
+}
+
+.fa:hover {
+    opacity: 0.7;
+}
+
+.fa-facebook {
+  background: #3B5998;
+  color: white;
+}
+
+.fa-twitter {
+  background: #55ACEE;
+  color: white;
+}
+
+.fa-google {
+  background: #dd4b39;
+  color: white;
+}
+.fa-youtube {
+  background: #bb0000;
+  color: white;
+}
+
+.fa-instagram {
+  background: #125688;
+  color: white;
+}
+
+
 </style>
-<!-- Custom styles for this template -->
-<link href="album.css" rel="stylesheet">
 </head>
 <body>
 	<header>
-		<div class="collapse bg-dark" id="navbarHeader">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-8 col-md-7 py-4">
-						<h4 class="text-white">About</h4>
-						<p class="text-muted">Add some information about the album
-							below, the author, or any other background context. Make it a few
-							sentences long so folks can pick up some informative tidbits.
-							Then, link them off to some social networking sites or contact
-							information.</p>
-					</div>
-					<div class="col-sm-4 offset-md-1 py-4">
-						<h4 class="text-white">Contact</h4>
-						<ul class="list-unstyled">
-							<li><a href="#" class="text-white">Follow on Twitter</a></li>
-							<li><a href="#" class="text-white">Like on Facebook</a></li>
-							<li><a href="#" class="text-white">Email me</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div class="navbar navbar-dark bg-dark shadow-sm">
 			<div class="container d-flex justify-content-between">
 				<a href="#" class="navbar-brand d-flex align-items-center"> <svg
@@ -66,296 +81,672 @@
 						fill="none" stroke="currentColor" stroke-linecap="round"
 						stroke-linejoin="round" stroke-width="2" aria-hidden="true"
 						class="mr-2" viewBox="0 0 24 24" focusable="false">
-						<path
-							d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-						<circle cx="12" cy="13" r="4" /></svg> <strong>Zoo Cinema</strong>
+						<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+						<circle cx="12" cy="13" r="4" /></svg> 
+						<strong>Zoo Cinema</strong>
 				</a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse"
-					data-target="#navbarHeader" aria-controls="navbarHeader"
-					aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
+				
+				<!-- 로그인 전 -->
+		<!-- 		 <div th:unless="${#authorization.expr('isAuthenticated()')}" class="btn-group">
+        			<a th:href="@{/home}" class="btn btn-dark" aria-controls="navbarHeader">Login</a>
+        			<a th:href="@{/signup}" class="btn btn-dark" aria-controls="navbarHeader">Sign in</a>
+    			</div> -->
+				
+				<div sec:authorize="isAnonymous()" class="btn-group">
+					<a th:href="@{/home}" class="btn btn-dark" aria-controls="navbarHeader">Login</a>
+					<a th:href="@{/signup}" class="btn btn-dark" aria-controls="navbarHeader">Sign in</a>
+				</div>
+				
+				<!-- 로그인 후 -->
+	<!-- 			<div th:if="${#authorization.expr('isAuthenticated()')}" class="btn-group">
+					<p th:text="${#authentication.name}">님 환영합니다</p>
+					<a th:href="@{/myinfo}" class="btn btn-dark" aria-controls="navbarHeader">회원정보</a>
+					<a href="/logout" th:href="@{/logout}" class="btn btn-dark" aria-controls="navbarHeader">Logout</a>
+				</div> -->
+	
 			</div>
 		</div>
 	</header>
 
-	<main role="main">
+<!-- main start -->
+<main role="main">
+	<!-- 영화정보 페이지 -->
+	<div class="album py-5 bg-light">
+		<div class="container">		
+			<div class="row">
 
-		<!-- 영화정보 페이지 -->
-		<div class="album py-5 bg-light">
-			<div class="container">
-				<div class="row">
-
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%"
-								height="225" xmlns="http://www.w3.org/2000/svg"
-								preserveAspectRatio="xMidYMid slice" focusable="false"
-								role="img" aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title><rect width="100%" height="100%"
-									fill="#55595c" />
-								<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting
-									text below as a natural lead-in to additional content. This
-									content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%"
-								height="225" xmlns="http://www.w3.org/2000/svg"
-								preserveAspectRatio="xMidYMid slice" focusable="false"
-								role="img" aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title><rect width="100%" height="100%"
-									fill="#55595c" />
-								<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting
-									text below as a natural lead-in to additional content. This
-									content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%"
-								height="225" xmlns="http://www.w3.org/2000/svg"
-								preserveAspectRatio="xMidYMid slice" focusable="false"
-								role="img" aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title><rect width="100%" height="100%"
-									fill="#55595c" />
-								<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting
-									text below as a natural lead-in to additional content. This
-									content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%"
-								height="225" xmlns="http://www.w3.org/2000/svg"
-								preserveAspectRatio="xMidYMid slice" focusable="false"
-								role="img" aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title><rect width="100%" height="100%"
-									fill="#55595c" />
-								<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting
-									text below as a natural lead-in to additional content. This
-									content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%"
-								height="225" xmlns="http://www.w3.org/2000/svg"
-								preserveAspectRatio="xMidYMid slice" focusable="false"
-								role="img" aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title><rect width="100%" height="100%"
-									fill="#55595c" />
-								<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting
-									text below as a natural lead-in to additional content. This
-									content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-4">
-						<div class="card mb-4 shadow-sm">
-							<svg class="bd-placeholder-img card-img-top" width="100%"
-								height="225" xmlns="http://www.w3.org/2000/svg"
-								preserveAspectRatio="xMidYMid slice" focusable="false"
-								role="img" aria-label="Placeholder: Thumbnail">
-								<title>Placeholder</title><rect width="100%" height="100%"
-									fill="#55595c" />
-								<text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-							<div class="card-body">
-								<p class="card-text">This is a wider card with supporting
-									text below as a natural lead-in to additional content. This
-									content is a little bit longer.</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-										<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-									</div>
-									<small class="text-muted">9 mins</small>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
+<!-------------------------- box1 -------------------------->
+<div class="col-md-4">
+	<div class="card mb-4 shadow-sm">
+<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
+		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
+			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
+		<title>여긴뭐지?</title>
+		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
+		 <text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
+		
+	<div class="card-body">
+	<!--<p class="card-text">add movie detail</p>  -->
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="btn-group">
+				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail1">상세보기</button>
+				<a th:href="@{/seatselect}" class="btn btn-outline-warning ">예매하기</a>
 			</div>
+			<small class="text-muted">예매율 ?? </small>
 		</div>
+	</div>
+		
+	</div>
+</div>
 
-		<!-- 박스오피스 -->
-		<section class="jumbotron text-center">
-			<div class="container">
-				<h1>박스오피스 자리</h1>
-				<p class="lead text-muted">Something short and leading about the
-					collection below—its contents, the creator, etc. Make it short and
-					sweet, but not too short so folks don’t simply skip over it
-					entirely.</p>
-				<p>
-					<a href="#" class="btn btn-primary my-2">Main call to action</a> <a
-						href="#" class="btn btn-secondary my-2">Secondary action</a>
-				</p>
+
+<!--  modal -->
+<div id="detail1" class="modal fade" >
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <!-- modal content -->
+      <div class="modal-content">
+      
+        <div class="modal-header">
+        	<h4 class="modal-title">Movier</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+        	<div class="container-fluid">
+        	 	<div class="row">
+      				<div class="col-sm-9"> head
+        				<div class="row">
+        					<div class="col-8 col-sm-6"> trailer
+        						<div class="embed-responsive embed-responsive-16by9">
+  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+								</div>
+        					</div>
+							<div class="col-4 col-sm-6"> description</div>
+        				</div>
+      				</div>
+    			</div>
+    			<button type="button" class="btn btn-primary float-right">예매하기</button>
+        	<br> 
+    	 		<div class="row">
+    	 			<div class="col-sm-9"> casting</div>
+    	 		</div>
+    	
+    			<div class="row">
+      				<div class="col-md-6 ml-auto">1111</div>
+      				<div class="col-md-6 ml-auto">222</div>
+      				<div class="col-md-6 ml-auto">3333</div>
+      				<div class="col-md-6 ml-auto">4444</div>
+    			</div> 
+    		</div> 
+    	
+        </div> <!-- modal body end -->
+        
+        <!-- comment  -->
+     	<form role="form" method="post">
+			<div class="form-group">
+            	<label for="message-text" class="col-form-label">Comment:</label>
+            	<textarea class="form-control" id="message-text"></textarea>
+				<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
+          	</div>
+<br>
+			<div class="modal-footer">
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      		</div>
+    	</form>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+<!-------------------------- box2 -------------------------->
+<div class="col-md-4">
+	<div class="card mb-4 shadow-sm">
+		
+<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
+		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
+			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
+		<title>여긴뭐지?</title>
+		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
+		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
+		
+	<div class="card-body">
+	<!--<p class="card-text">add movie detail</p>  -->
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="btn-group">
+				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail2">상세보기</button>
+				<a th:href="@{/templates/seatselect}" class="btn btn-outline-warning ">예매하기</a>
 			</div>
-		</section>
+			<small class="text-muted">예매율 ?? </small>
+		</div>
+	</div>
+		
+	</div>
+</div>
 
-	</main>
+
+<!--  modal -->
+<div id="detail2" class="modal fade" >
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <!-- modal content -->
+      <div class="modal-content">
+      
+        <div class="modal-header">
+        	<h4 class="modal-title">Movier</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+        	<div class="container-fluid">
+        	 	<div class="row">
+      				<div class="col-sm-9"> head
+        				<div class="row">
+        					<div class="col-8 col-sm-6"> trailer
+        						<div class="embed-responsive embed-responsive-16by9">
+  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+								</div>
+        					</div>
+							<div class="col-4 col-sm-6"> description</div>
+        				</div>
+      				</div>
+    			</div>
+    			<button type="button" class="btn btn-primary float-right">예매하기</button>
+        	<br> 
+    	 		<div class="row">
+    	 			<div class="col-sm-9"> casting</div>
+    	 		</div>
+    	
+    			<div class="row">
+      				<div class="col-md-6 ml-auto">1111</div>
+      				<div class="col-md-6 ml-auto">222</div>
+      				<div class="col-md-6 ml-auto">3333</div>
+      				<div class="col-md-6 ml-auto">4444</div>
+    			</div> 
+    		</div> 
+    	
+        </div> <!-- modal body end -->
+        
+        <!-- comment  -->
+     	<form>
+			<div class="form-group">
+            	<label for="message-text" class="col-form-label">Comment:</label>
+            	<textarea class="form-control" id="message-text"></textarea>
+            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
+          	</div>
+<br>
+			<div class="modal-footer">
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      		</div>
+    	</form>
+        
+      </div>
+    </div>
+  </div>
+  
+  
+<!-------------------------- box3 -------------------------->
+<div class="col-md-4">
+	<div class="card mb-4 shadow-sm">
+		
+<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
+		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
+			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
+		<title>여긴뭐지?</title>
+		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
+		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
+		
+	<div class="card-body">
+	<!--<p class="card-text">add movie detail</p>  -->
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="btn-group">
+				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail3">상세보기</button>
+				<a href="templates/seatselect.html" class="btn btn-outline-warning ">예매하기</a>
+			</div>
+			<small class="text-muted">예매율 ?? </small>
+		</div>
+	</div>
+		
+	</div>
+</div>
 
 
-	<!-- footer -->
-	<footer class="text-muted">
-		<div class="container">
-			<p class="float-right">
-				<a href="#">Back to top</a>
+<!--  modal -->
+<div id="detail3" class="modal fade" >
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <!-- modal content -->
+      <div class="modal-content">
+      
+        <div class="modal-header">
+        	<h4 class="modal-title">Movier</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+        	<div class="container-fluid">
+        	 	<div class="row">
+      				<div class="col-sm-9"> head
+        				<div class="row">
+        					<div class="col-8 col-sm-6"> trailer
+        						<div class="embed-responsive embed-responsive-16by9">
+  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+								</div>
+        					</div>
+							<div class="col-4 col-sm-6"> description</div>
+        				</div>
+      				</div>
+    			</div>
+    			<button type="button" class="btn btn-primary float-right">예매하기</button>
+        	<br> 
+    	 		<div class="row">
+    	 			<div class="col-sm-9"> casting</div>
+    	 		</div>
+    	
+    			<div class="row">
+      				<div class="col-md-6 ml-auto">1111</div>
+      				<div class="col-md-6 ml-auto">222</div>
+      				<div class="col-md-6 ml-auto">3333</div>
+      				<div class="col-md-6 ml-auto">4444</div>
+    			</div> 
+    		</div> 
+    	
+        </div> <!-- modal body end -->
+        
+        <!-- comment  -->
+     	<form>
+			<div class="form-group">
+            	<label for="message-text" class="col-form-label">Comment:</label>
+            	<textarea class="form-control" id="message-text"></textarea>
+            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
+          	</div>
+<br>
+			<div class="modal-footer">
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      		</div>
+    	</form>
+        
+      </div>
+    </div>
+  </div>
+  
+  
+<!-------------------------- box4 -------------------------->
+<div class="col-md-4">
+	<div class="card mb-4 shadow-sm">
+<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
+		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
+			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
+		<title>여긴뭐지?</title>
+		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
+		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
+		
+	<div class="card-body">
+	<!--<p class="card-text">add movie detail</p>  -->
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="btn-group">
+				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail4">상세보기</button>
+				<a href="templates/seatselect.html" class="btn btn-outline-warning ">예매하기</a>
+			</div>
+			<small class="text-muted">예매율 ?? </small>
+		</div>
+	</div>
+		
+	</div>
+</div>
+
+
+<!--  modal -->
+<div id="detail4" class="modal fade" >
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <!-- modal content -->
+      <div class="modal-content">
+      
+        <div class="modal-header">
+        	<h4 class="modal-title">Movier</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+        	<div class="container-fluid">
+        	 	<div class="row">
+      				<div class="col-sm-9"> head
+        				<div class="row">
+        					<div class="col-8 col-sm-6"> trailer
+        						<div class="embed-responsive embed-responsive-16by9">
+  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+								</div>
+        					</div>
+							<div class="col-4 col-sm-6"> description</div>
+        				</div>
+      				</div>
+    			</div>
+    			<button type="button" class="btn btn-primary float-right">예매하기</button>
+        	<br> 
+    	 		<div class="row">
+    	 			<div class="col-sm-9"> casting</div>
+    	 		</div>
+    	
+    			<div class="row">
+      				<div class="col-md-6 ml-auto">1111</div>
+      				<div class="col-md-6 ml-auto">222</div>
+      				<div class="col-md-6 ml-auto">3333</div>
+      				<div class="col-md-6 ml-auto">4444</div>
+    			</div> 
+    		</div> 
+    	
+        </div> <!-- modal body end -->
+        
+        <!-- comment  -->
+     	<form>
+			<div class="form-group">
+            	<label for="message-text" class="col-form-label">Comment:</label>
+            	<textarea class="form-control" id="message-text"></textarea>
+            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
+          	</div>
+<br>
+			<div class="modal-footer">
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      		</div>
+    	</form>
+        
+      </div>
+    </div>
+  </div>    
+
+<!-------------------------- box5 -------------------------->
+<div class="col-md-4">
+	<div class="card mb-4 shadow-sm">
+		
+<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
+		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
+			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
+		<title>여긴뭐지?</title>
+		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
+		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
+		
+	<div class="card-body">
+	<!--<p class="card-text">add movie detail</p>  -->
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="btn-group">
+				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail5">상세보기</button>
+				<a href="templates/seatselect.html" class="btn btn-outline-warning ">예매하기</a>
+			</div>
+			<small class="text-muted">예매율 ?? </small>
+		</div>
+	</div>
+		
+	</div>
+</div>
+
+
+<!--  modal -->
+<div id="detail5" class="modal fade" >
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <!-- modal content -->
+      <div class="modal-content">
+      
+        <div class="modal-header">
+        	<h4 class="modal-title">Movier</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+        	<div class="container-fluid">
+        	 	<div class="row">
+      				<div class="col-sm-9"> head
+        				<div class="row">
+        					<div class="col-8 col-sm-6"> trailer
+        						<div class="embed-responsive embed-responsive-16by9">
+  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+								</div>
+        					</div>
+							<div class="col-4 col-sm-6"> description</div>
+        				</div>
+      				</div>
+    			</div>
+    			<button type="button" class="btn btn-primary float-right">예매하기</button>
+        	<br> 
+    	 		<div class="row">
+    	 			<div class="col-sm-9"> casting</div>
+    	 		</div>
+    	
+    			<div class="row">
+      				<div class="col-md-6 ml-auto">1111</div>
+      				<div class="col-md-6 ml-auto">222</div>
+      				<div class="col-md-6 ml-auto">3333</div>
+      				<div class="col-md-6 ml-auto">4444</div>
+    			</div> 
+    		</div> 
+    	
+        </div> <!-- modal body end -->
+        
+        <!-- comment  -->
+     	<form>
+			<div class="form-group">
+            	<label for="message-text" class="col-form-label">Comment:</label>
+            	<textarea class="form-control" id="message-text"></textarea>
+            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
+          	</div>
+<br>
+			<div class="modal-footer">
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      		</div>
+    	</form>
+        
+      </div>
+    </div>
+  </div>
+
+			
+<!-------------------------- box6 -------------------------->
+<div class="col-md-4">
+	<div class="card mb-4 shadow-sm">
+		
+<!--  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap"> -->
+		<svg class="bd-placeholder-img card-img-top" width="50%" height="225" xmlns="http://www.w3.org/2000/svg" 
+			preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"> 
+		<title>여긴뭐지?</title>
+		<rect width="100%" height="100%" fill="#55595c"/>  <!-- 회색박스 부분  -->
+		<text x="50%" y="90%" fill="#eceeef" dy=".3em">영화 제목 - hover mouse on 추가 </text></svg>
+		
+	<div class="card-body">
+	<!--<p class="card-text">add movie detail</p>  -->
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="btn-group">
+				<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail6">상세보기</button>
+				<a href="templates/seatselect.html" class="btn btn-outline-warning ">예매하기</a>
+			</div>
+			<small class="text-muted">예매율 ?? </small>
+		</div>
+	</div>
+		
+	</div>
+</div>
+
+
+<!--  modal -->
+<div id="detail6" class="modal fade" >
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <!-- modal content -->
+      <div class="modal-content">
+      
+        <div class="modal-header">
+        	<h4 class="modal-title">Movier</h4>
+        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <div class="modal-body">
+        	<div class="container-fluid">
+        	 	<div class="row">
+      				<div class="col-sm-9"> head
+        				<div class="row">
+        					<div class="col-8 col-sm-6"> trailer
+        						<div class="embed-responsive embed-responsive-16by9">
+  								<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+								</div>
+        					</div>
+							<div class="col-4 col-sm-6"> description</div>
+        				</div>
+      				</div>
+    			</div>
+    			<button type="button" class="btn btn-primary float-right">예매하기</button>
+        	<br> 
+    	 		<div class="row">
+    	 			<div class="col-sm-9"> casting</div>
+    	 		</div>
+    	
+    			<div class="row">
+      				<div class="col-md-6 ml-auto">1111</div>
+      				<div class="col-md-6 ml-auto">222</div>
+      				<div class="col-md-6 ml-auto">3333</div>
+      				<div class="col-md-6 ml-auto">4444</div>
+    			</div> 
+    		</div> 
+    	
+        </div> <!-- modal body end -->
+        
+        <!-- comment  -->
+     	<form>
+			<div class="form-group">
+            	<label for="message-text" class="col-form-label">Comment:</label>
+            	<textarea class="form-control" id="message-text"></textarea>
+            	<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
+          	</div>
+<br>
+			<div class="modal-footer">
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      		</div>
+    	</form>
+        
+      </div>
+    </div>
+  </div>
+  
+ <!-- box end --> 			
+		</div>
+	</div>
+</div> 
+	
+
+<!-- 박스오피스 -->
+<section class="jumbotron text-center">
+	<div class="container">
+	
+	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+ 		 <ol class="carousel-indicators">
+    		<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    		<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    		<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  		</ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="..." alt="First slide">
+        <div class="carousel-caption d-none d-md-block">
+	      	<h1>박스오피스 자리</h1>
+			<p> 
+				<a href="#" class="btn btn-primary my-2">상세보기</a> 
+				<a href="#" class="btn btn-secondary my-2">예고편 보기</a>
 			</p>
+		</div>
+    </div>
+    
+    <div class="carousel-item">
+      <img class="d-block w-100" src="..." alt="Second slide">
+        <div class="carousel-caption d-none d-md-block">
+	      	<h1>박스오피스 자리</h1>
+			<p> 
+				<a href="#" class="btn btn-primary my-2">상세보기</a> 
+				<a href="#" class="btn btn-secondary my-2">예고편 보기</a>
+			</p>
+		</div>
+    </div>
+    
+    <div class="carousel-item">
+      <img class="d-block w-100" src="..." alt="Third slide">
+        <div class="carousel-caption d-none d-md-block">
+	      	<h1>박스오피스 자리</h1>
+			<p> 
+				<a href="#" class="btn btn-primary my-2">상세보기</a> 
+				<a href="#" class="btn btn-secondary my-2">예고편 보기</a>
+			</p>
+		</div>
+    </div>
+  </div>
+	<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    	<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    	<span class="sr-only">Previous</span>
+	</a>
+	<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    	<span class="carousel-control-next-icon" aria-hidden="true"></span>
+    	<span class="sr-only">Next</span>
+  	</a>
+</div>
 
-			<div class="footer_sns">
-				<ul>
-					<li class="icon s1"><a href="#"><span class="ir_pm">트위터</span></a></li>
-					<li class="icon s2"><a href="#"><span class="ir_pm">페이스북</span></a></li>
-					<li class="icon s3"><a href="#"><span class="ir_pm">인스타그램</span></a></li>
-					<li class="icon s4"><a href="#"><span class="ir_pm">구글
-								플레이</span></a></li>
-					<li class="icon s5"><a href="#"><span class="ir_pm">아이폰
-								앱스토어</span></a></li>
-				</ul>
-				<div class="tel">
-					<a href="#">ARS <em>1544-0070</em></a>
-				</div>1
+	</div> <!-- container end -->
+</section>
+</main>
 
 
-				<div id="footer_infor">
-					<div class="container">
-						<div class="row">
-							<div class="footer_infor">
-								<h2></h2>
-								<ul>
-									<li><a href="#">회사소개</a></li>
-									<li><a href="#">채용정보</a></li>
-									<li><a href="#">제휴/광고/부대사업 문의</a></li>
-									<li><a href="#">이용약관</a></li>
-									<li><a href="#">개인정보처리방침</a></li>
-									<li><a href="#">고객센터</a></li>
-									<li><a href="#">윤리경영</a></li>
-								</ul>
-								<address>
-									<p>
-										서울특별시 강남구 도산대로 156, 2층 메가박스중앙(주) (논현동, 중앙엠앤비사옥)<br> <span
-											class="bar2">대표자명 김진선</span> 개인정보보호 책임자 경영지원실 실장 박영진<br>
-										<span class="bar2">사업자등록번호 211-86-59478</span> 통신판매업신고번호 제
-										833호
-									</p>
-									<p>Copyright 2014 by MegaboxJoongAng Inc. All right
-										reserved</p>
-								</address>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-	</footer>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-		crossorigin="anonymous"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')
-	</script>
-	<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+<!-- footer -->
+
+<div class="jumbotron text-center" style="margin-bottom:0">
+
+<div class="container">
+
+<div class="footer_sns">
+	<a th:href="@{https://www.facebook.com/}" th:target="_blank" class="fa fa-facebook"></a>
+	<a th:href="@{https://www.twitter.com/}" th:target="_blank" class="fa fa-twitter"></a>
+	<a th:href="@{https://www.google.com/}" th:target="_blank" class="fa fa-google"></a>
+	<a th:href="@{https://www.youtube.com/}" th:target="_blank" class="fa fa-youtube"></a>
+	<a th:href="@{https://www.instagram.com/}" th:target="_blank" class="fa fa-instagram"></a>
+<!-- <div class="tel"> <a href="#">ARS <em>1234-5678</em></a> </div> -->
+</div>
+
+
+<div id="footer_infor">
+<div class="container">
+<!-- 		<div class="footer_infor">
+			<ul>
+				<li><a href="#">회사소개</a></li>
+				<li><a href="#">채용정보</a></li>
+				<li><a href="#">제휴/광고/부대사업 문의</a></li>
+				<li><a href="#">이용약관</a></li>
+				<li><a href="#">개인정보처리방침</a></li>
+				<li><a href="#">고객센터</a></li>
+				<li><a href="#">윤리경영</a></li>
+			</ul>
+		</div> -->	
+<address>
+<small>서울특별시 서초구 강남대로 459, Zoo Film(주) <br> <span class="bar2">대표자명 강진영</span> 개인정보보호 책임자 경영지원실 실장 임대혁<br>
+<span class="bar2">사업자등록번호 123-45-67890</span> 통신판매업신고번호 제 1111호 </small><br>
+<small>Copyright 2020 by Zoo Cinema Inc. All right reserved</small>
+</address>
+		<p class="float-right"> <a href="#">Back to top</a></p>
+</div>
+</div>
+</div>
+</div>
+	
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="../../assets/js/vendor/popper.min.js"></script>
+<script src="../../dist/js/bootstrap.min.js"></script>
+<script src="../../assets/js/vendor/holder.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+/* $('#myCarousel').on('slide.bs.carousel', function () {
+	  // do something…
+}) */
+
+$('.carousel').carousel({
+  interval: 4000
+})
+
+
+</script>
 </html>
 
-
-
-
-
-<!--     <footer id="footer">
-        <div id="footer_sns">
-            <div class="container">
-                <div class="footer_sns">
-                    <ul>
-                        <li class="icon s1"><a href="#"><span class="ir_pm">트위터</span></a></li>
-                        <li class="icon s2"><a href="#"><span class="ir_pm">페이스북</span></a></li>
-                        <li class="icon s3"><a href="#"><span class="ir_pm">인스타그램</span></a></li>
-                        <li class="icon s4"><a href="#"><span class="ir_pm">구글 플레이</span></a></li>
-                        <li class="icon s5"><a href="#"><span class="ir_pm">아이폰 앱스토어</span></a></li>
-                    </ul>    
-                    <div class="tel">
-                        <a href="#">ARS <em>1544-0070</em></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="footer_infor">
-            <div class="container">
-                <div class="row">
-                    <div class="footer_infor">
-                        <h2><img src="assets/img/logo_footer.png" alt="megabox"></h2>
-                        <ul>
-                            <li><a href="#">회사소개</a></li>
-                            <li><a href="#">채용정보</a></li>
-                            <li><a href="#">제휴/광고/부대사업 문의</a></li>
-                            <li><a href="#">이용약관</a></li>
-                            <li><a href="#">개인정보처리방침</a></li>
-                            <li><a href="#">고객센터</a></li>
-                            <li><a href="#">윤리경영</a></li>
-                        </ul>
-                        <address>
-                            <p>서울특별시 강남구 도산대로 156, 2층 메가박스중앙(주) (논현동, 중앙엠앤비사옥)<br><span class="bar2">대표자명 김진선</span> 개인정보보호 책임자 경영지원실 실장 박영진<br><span class="bar2">사업자등록번호 211-86-59478</span> 통신판매업신고번호 제 833호</p>
-                            <p>Copyright 2014 by MegaboxJoongAng Inc. All right reserved</p>
-                        </address>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer> -->

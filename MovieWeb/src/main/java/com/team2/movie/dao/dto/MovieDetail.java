@@ -33,7 +33,7 @@ public class MovieDetail {
 	@NonNull
 	private Long movieDetailId;
 
-	@Column(name = "MOVIECODE") // JOIN
+  @Column(name = "MOVIECODE") 
 	private String movieCd;
 
 	@Column(name = "MOVIENAME")
