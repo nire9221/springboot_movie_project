@@ -92,10 +92,7 @@ public class HomeController {
 	
 	@GetMapping("/signup")
 	public String signup(@RequestParam("name") String name,@RequestParam("mail") String mail,@RequestParam("pnum") String pnum,@RequestParam("year") String year,@RequestParam("mon") String mon,@RequestParam("day") String day, HttpSession session) {
-		Date birth = new Date();
-		birth.setYear(Integer.parseInt(year));
-		birth.setMonth(Integer.parseInt(mon));
-		birth.setDate(Integer.parseInt(day));
+		Date birth = new Date(Integer.parseInt(year)-1900,Integer.parseInt(mon)-1,Integer.parseInt(day));
 		mail=mail.replace(",", "@");
 		pnum=pnum.replace(",", "-");
 		String id = session.getAttribute("id").toString();
@@ -110,6 +107,9 @@ public class HomeController {
 		//birth = new Date(Integer.parseInt(year),Integer.parseInt(mon),Integer.parseInt(day));
 		memberdao.save(member);
 		System.out.println(member);
+		// 생년월일 변환
+		SimpleDateFormat birthday = new SimpleDateFormat("yyyy년MM월dd일");
+		System.out.println(birthday.format(birth));
 		session.setAttribute("membersession",member);
 		return "redirect:/";
 	}
