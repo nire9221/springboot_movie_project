@@ -1,5 +1,6 @@
 package com.team2.movie.controller;
 
+import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.team2.movie.dao.api.MovieDetailDao;
+import com.team2.movie.dao.api.MovieMainDao;
+import com.team2.movie.dao.dto.MovieDetail;
+import com.team2.movie.dao.dto.MovieMain;
 import com.team2.movie.dao.api.MemberDao;
 import com.team2.movie.dao.dto.Member;
 import com.team2.movie.services.KakaoPay;
@@ -26,11 +31,23 @@ import lombok.extern.java.Log;
 @Log
 @Controller
 public class HomeController {
+	
+	@Autowired
+	MovieMainDao movieMainDao;
+	
+	@Autowired
+	MovieDetailDao movieDetailDao;
+	
 	@Autowired
 	MemberDao memberdao;
 	
 	@GetMapping("/")
-	public String main() {
+	public String movieMain(Model model){ 
+		List<MovieMain> movieList = movieMainDao.findAll();
+		List<MovieDetail> movieDetailList = movieDetailDao.findAll();
+		model.addAttribute("movieList",movieList);
+		model.addAttribute("movieDetail",movieDetailList);
+		
 		return "main";
 	}
 	

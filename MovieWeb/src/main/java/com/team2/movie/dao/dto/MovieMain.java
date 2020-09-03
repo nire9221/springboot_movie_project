@@ -1,7 +1,6 @@
 package com.team2.movie.dao.dto;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,6 +35,9 @@ public class MovieMain {
 	
 	@Column(name = "RANK")
 	private String rank;
+	
+	@Column(name = "IMAGE")
+	private String image;
 	
 	@Column(name = "RANKINTEN")
 	private String rankInten;
