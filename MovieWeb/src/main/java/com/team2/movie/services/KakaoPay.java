@@ -28,11 +28,13 @@ public class KakaoPay {
     
     private KakaoPayReadyVO kakaoPayReadyVO;
     private KakaoPayApprovalVO kakaoPayApprovalVO;
+    private String moviename,name;
     
-    public String kakaoPayReady() {
+    public String kakaoPayReady(String title,String name) {
     	System.out.println("kakaopay 처음부분");
         RestTemplate restTemplate = new RestTemplate();
- 
+        moviename=title;
+        this.name=name;
         // 서버로 요청할 Header
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "KakaoAK " + "9dc1dc65209a1ac0b4f53ba7c056e068");
@@ -42,12 +44,12 @@ public class KakaoPay {
         // 서버로 요청할 Body
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", "TC0ONETIME");
-        params.add("partner_order_id", "1");
-        params.add("partner_user_id", "heyok");
-        params.add("item_name", "영화 제목");
-        params.add("quantity", "1");
-        params.add("total_amount", "16000");
-        params.add("tax_free_amount", "10000");
+        params.add("partner_order_id", "1");	//ticketid
+        params.add("partner_user_id", name);	//session.name
+        params.add("item_name", title);		//title
+        params.add("quantity", "1");			//seatselect로 받은 seat개수
+        params.add("total_amount", "16000");	//quantity*가격
+        params.add("tax_free_amount", "10000");	//임의값
         params.add("approval_url", "http://114.200.5.121:65532/kakaoPaySuccess");
         params.add("cancel_url", "http://114.200.5.121:65532/kakaoPayCancel");
         params.add("fail_url", "http://114.200.5.121:65532/kakaoPaySuccessFail");
@@ -91,8 +93,8 @@ public class KakaoPay {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", "TC0ONETIME");
         params.add("tid", kakaoPayReadyVO.getTid());
-        params.add("partner_order_id", "1");
-        params.add("partner_user_id", "heyok");
+        params.add("partner_order_id", "1");	//ticketid
+        params.add("partner_user_id", name);	//session.id
         params.add("pg_token", pg_token);
         params.add("total_amount", "16000");
         

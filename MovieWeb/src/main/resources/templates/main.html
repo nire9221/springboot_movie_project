@@ -1,39 +1,44 @@
 <!doctype html>
 <html 
 xmlns:th="http://www.thymeleaf.org" 
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+layout:decorator="layouts/main" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="zoo cinema movie web springboot">
 <title>Zoo Cinema</title>
 <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/album/">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
 <!-- Bootstrap core CSS -->
 <link href="../resources/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="album.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{/markdown/css/github-gist.css}" />
+<link rel="stylesheet" th:href="@{/css/comments.css}" />
 
 <style>
 .bd-placeholder-img {
-	font-size: 1.125rem;
-	text-anchor: middle;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
+   font-size: 1.125rem;
+   text-anchor: middle;
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
 }
 
 @media ( min-width : 768px) {
-	.bd-placeholder-img-lg {
-		font-size: 3.5rem;
-	}
+   .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+   }
 }
 
 <!--social button-->
 .fa {
   padding: 20px;
-  font-size: 30px;
+  font-size: 20px;
   width: 30px;
   text-align: center;
   text-decoration: none;
@@ -69,178 +74,404 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
   color: white;
 }
 
+.carousel-item img{
+   height:800px;
+}
+
+.checked {
+color: orange;
+} 
 
 </style>
 </head>
-<body>
-	<header>
-		<div class="navbar navbar-dark bg-dark shadow-sm">
-			<div class="container d-flex justify-content-between">
-				<a href="#" class="navbar-brand d-flex align-items-center"> <svg
-						xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-						fill="none" stroke="currentColor" stroke-linecap="round"
-						stroke-linejoin="round" stroke-width="2" aria-hidden="true"
-						class="mr-2" viewBox="0 0 24 24" focusable="false">
-						<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-						<circle cx="12" cy="13" r="4" /></svg> 
-						<strong>Zoo Cinema</strong>
-						<!-- <div id="ranking"></div> -->
-				</a>
-				
-				<div th:if="${session.membersession!=null}" class="btn-group">
-					<form action="/logout" method="post">
-						<input type="submit" value="logout" class="btn">
-					</form>
-    			<form action="/mypage">
-					<input type="submit" class="btn btn-secondary" value="mypage">
-      				</form>
-				</div>
-   				<div th:if="${session.membersession==null}">
-      				<form action="/login" method="post" class="btn">
-         			<input type="submit" class="btn btn-secondary" value="login">
-      			</form>
-   				</div> 
-	
-			</div>
-		</div>
-	</header>
+<body class="bg-light">
+   <header>
+      <div class="navbar navbar-dark bg-dark shadow-sm">
+      
+         <div class="container d-flex justify-content-between">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+            <img th:src="@{/images/logo.png}" alt="logo" width="80" height="60">
+            <strong>&nbsp&nbsp&nbsp&nbspZoo Cinema</strong>
+            </a>
+                        
+            <div th:if="${session.membersession!=null}" class="btn-group">
+               <form action="/logout" method="post">
+                  <input type="submit" value="logout" class="btn">
+               </form>
+             <form action="/mypage">
+               <input type="submit" class="btn btn-secondary" value="mypage">
+                  </form>
+            </div>
+               <div th:if="${session.membersession==null}">
+                  <form action="/login" method="post" class="btn">
+                  <input type="submit" class="btn btn-secondary" value="login">
+               </form>
+               </div> 
+   
+         </div>
+      </div>
+   </header>
 
 <!-- main start -->
-<main role="main">
+<main role="main" class = "bg-light">
 
 <!-- 영화정보 페이지 -->
-<div class="album py-5 bg-light">
-	<div class="container">		
-		<div class="row">
+<div id="currentMovie" class="album py-5 bg-light" style="margin-bottom:45px; margin-top:45px;">
+   <div class="container">      
+      <div class="row">
 <!-------------------------- box1 -------------------------->
-			<div class="col-md-4"  th:each="movieList,index: ${movieList}">
-				<div class="card mb-4 shadow-sm" id="movieResult" th:if="${index.index}<3">
- 				<img th:src="${movieList.image}" class="card-img-top" width="50%" height="350" alt="thumbnail"/> 
-		 		<p id="getMovieInfo" th:text="${movieList.movieNm}" x="50%" y="90%" fill="#eceeef" dy=".3em"></p>
-		
-			<div class="card-body">
-				<div class="d-flex justify-content-between align-items-center">
-				<div class="btn-group">
-					<button type="button" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail1">상세보기</button>
-					<a id="bookBtn" th:href="@{/seatselect}" class="btn btn-outline-warning ">예매하기</a>
-				</div>
-				</div>
-			</div>
-				</div>
-			</div>
-		</div>
+         <div class="col-md-4" th:each="movie,index: ${movieList}" >
+            <div class="card mb-4 shadow-sm" id="movieResult" th:if="${index.index}<3">
+             <img th:src="${movie.image}" class="card-img-top" width="50%" height="350" alt="thumbnail"/>
+                <p id="getMovieInfo" style="padding:20px" th:text="${movie.movieNm}"></p>
+      
+         <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+            <form action="/detailinfo" class="btn-group" method="get">
+               <input type="hidden" name="movieCd" th:value="${movie.movieCd}"> 
+               <button type="submit" class="btn btn-md btn-outline-warning" data-toggle="modal" data-target="#detail1">상세보기</button>
+               <a id="bookBtn" th:href="@{/bookingpage}" class="btn btn-outline-warning ">예매하기</a>   <i class="fas fa-film fa-2x" style="margin-left:10px"></i>
+            </form>
+            </div>
+         </div>
+            </div>
+         </div>
+      </div>
 
 <!--  modal -->
-<div th:id="detail1" class="modal fade">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" >
-    <!-- modal content -->
+<div th:id="detail1" class="modal fade" >
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+<!-- modal content -->    
       <div class="modal-content"  >
-        <div class="modal-header"  >
-        	<h4 class="modal-title">title</h4>
-        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-header" >
+           <h4 class="modal-title"></h4>
+           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
         <div class="modal-body">
-        	<div class="container-fluid">
-        	 	<div class="row">
-      				<div class="col-sm-9 trailer"> 
-        				<div class="row">
-        					<div class="col-8 col-sm-6"> 
-        						<div class="embed-responsive embed-responsive-16by9">
-  									<iframe src="" class="embed-responsive-item" allowfullscreen></iframe>
-								</div>
-        					</div>
-							<div class="col-4 col-sm-6 description"> </div>
-        				</div>
-      				</div>
-    			</div>
-    			<button id="bookBtn" th:href="@{/seatselect}" type="button" class="btn btn-primary float-right">예매하기</button>
-        	<br> 
-    	<!-- 		<div class="row" th:each="movieDetail,index: ${movieDetail}" th:if="${index.index}<1">
-      				상영시간 : <div class="col-md-6 ml-auto" th:text="${movieDetail.showTm}"> </div>
-      				개봉일 : <div class="col-md-6 ml-auto" th:text="${movieDetail.openDt}"> </div>
-	      			상영등급 : <div class="col-md-6 ml-auto" th:text="${movieDetail.watchGradeNm}"> </div>
-	      			감독 : <div class="col-md-6 ml-auto" th:text="${movieDetail.directorNm}"> </div>
-	      			배우 : <div class="col-md-6 ml-auto" th:text="${movieDetail.actorNm}"> </div>
-    			</div>  -->
-    		</div> 
-    	
-        </div> <!-- modal body end -->
-        
+           <div class="container-fluid">
+               <div class="row">
+                  <div class="col-sm-9 trailer"> 
+                    <div class="row">
+                       <div class="col-8 col-sm-6"> 
+                          <div class="embed-responsive embed-responsive-16by9">
+                             <iframe src="" class="embed-responsive-item" allowfullscreen></iframe>
+                        </div>
+                       </div>
+                     <div class="col-4 col-sm-6 description"> </div>
+                    </div>
+                  </div>
+             </div>
+             <form action="/" method="get">
+             <button id="bookBtn" th:href="@{/bookingpage}" type="button" class="btn btn-primary float-right">예매하기</button></form>
+           <br> 
+             <div>
+                <th:block th:if="${movieDetail != null}">
+                <div th:text="${movieDetail.movieCd}"></div>
+                  상영시간 : <div th:text="${movieDetail.showTm}"> </div>
+                  개봉일 : <div th:text="${movieDetail.openDt}"> </div>
+                  장르 : <div th:text="${movieDetail.genreNm}"> </div>
+                  상영등급 : <div th:text="${movieDetail.watchGradeNm}"> </div>
+                  감독 : <div th:text="${movieDetail.directorNm}"> </div>
+                  배우 : <div th:text="${movieDetail.actorNm}"> </div>
+                  </th:block>
+             </div> 
+          </div> 
+        </div> <!--  modal body end-->
+
+<!-- comment -->        
+        <!-- 별점 -->
+<div>
+<span onmouseover="starmark(this)" onclick="starmark(this)" id="1one" style="font-size:40px;cursor:pointer;"  class="fa fa-star checked"></span>
+<span onmouseover="starmark(this)" onclick="starmark(this)" id="2one"  style="font-size:40px;cursor:pointer;" class="fa fa-star "></span>
+<span onmouseover="starmark(this)" onclick="starmark(this)" id="3one"  style="font-size:40px;cursor:pointer;" class="fa fa-star "></span>
+<span onmouseover="starmark(this)" onclick="starmark(this)" id="4one"  style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+<span onmouseover="starmark(this)" onclick="starmark(this)" id="5one"  style="font-size:40px;cursor:pointer;" class="fa fa-star"></span>
+</div>
+
+<!--한줄평-->
+<div class="container">
+      <h2>게시판</h2>
+      <form action="#" th:action="@{/main}" th:object="${commentBoard}" method="post">
+      <input type="hidden" th:text="${session.membersession.kakaoId}">
+         <div class="form-group">
+            <label for="contents">내용</label>
+            <textarea class="form-control" th:classappend="${#fields.hasErrors('contents')} ? 'is-invalid'" id="contents" rows="3" th:field="*{contents}"></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}">
+                제목 에러 메시지
+             </div>
+         </div>
+         <div class="text-right">
+            <button type="submit" class="btn btn-secondary">확인</button>
+            <a type="button" class="btn btn-secondary" th:href="@{/main}">취소</a>
+         </div>
+      </form>
+   </div>
+
+<div class="container">
+<table class="table table-striped">
+<thead>
+<tr>
+<th scope="col">ID</th>
+<th scope="col">별점</th>
+<th scope="col">한줄평
+</th>
+</thead>
+<tbody>
+<tr th:each="commentBoard:${commentBoardList}">
+<td th:text="${commentBoard.kakaoId}"></td>
+<td th:text="${commentBoard.star}">ㄹㄹㄹ</td>
+<td th:text="${commentBoard.contents}" th:href="@{/main(id=${commentBoard.kakaoId})">ㅁㄴㅇㄹ</td>
+<td>홍길동</td>
+</tr>
+</table>
+<div class="text=right">
+<button type="submit" class="btn btn-primary">확인</button>
+</div>
+</div>
+
+ <form action="#" th:action="@{/main}" th:object="${commentBoard}" method="post">
+  <input type="hidden" th:value="*{kakaoId}" name="kakaoId"/>
+       <div class="form-group">
+          <label for="contents">한줄평</label>
+          <textarea class="form-control" th:classappend="${#fields.hasErrors('contents')} ? 'is-invalid'" id="contents" rows="3" th:field="*{contents}"></textarea>
+       <div class="invalid-feedback" th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}">   
+        </div>
+        </div>
+        <div class="text-right">
+       <button type="submit" class="btn btn-primary">확인</button>
+        <a type="button" class="btn btn-primary" th:href="@{/main}">취소</a>
+    </div>
+    </form>
+</div>
+
+
+
+
+
+
+<!-- <div class="container" layout:fragment="content">
+        <ul class="pager" sec:authorize="hasRole('ROLE_ADMIN')">
+            <li class="next">
+                <a th:href="@{'/posts/edit/' + ${post.id}}">edit</a>
+            </li>
+        </ul>
+        <div class="row">
+            <h1 class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1" style="margin-bottom:3%" th:text="${post.title}">
+            </h1>
+            <div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1" th:utext="${post.content}">
+            </div>
+        </div>
+        <div class="row" style="padding-top: 100px;">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <h4 id="addComment">Leave a Comment:</h4>
+                <form  th:action="@{/comments}"
+                       th:object="${commentDto}" method="post" th:id="comment">
+                    <input type="hidden" th:value="${post.id}" id="postId" name="postId"/>
+                    <div class="well" sec:authorize="hasRole('ROLE_USER')" th:classappend="(${#fields.hasErrors('content')}? ' has-error')">
+                        <input type="text" class="form-control input-lg" id="content" name="content"
+                               placeholder="content"/>
+                        <span class="help-block" th:if="${#fields.hasErrors('content')}"
+                              th:errors="*{content}"></span>
+                        <ul class="pager" style="text-align:right;" >
+                            <li class="next">
+                                <button  type="submit" class="btn btn-primary">Submit</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="well" sec:authorize="!hasRole('ROLE_USER')">Please <a th:href="@{/login}">sign in</a> to add comments!</p>
+                </form>
+                <form th:object="${commentDto}" th:action="@{/}" method="post" th:id="deleteComment">
+                    <ul class="media-list comments" th:each="comment : ${post.comments}">
+                        <li class="media">
+                            <a class="pull-left" href="#">
+                                <img class="media-object img-circle img-thumbnail" th:src="${comment.user.avatarUrl}" src="http://snipplicious.com/images/guest.png" width="64" alt="Generic placeholder image" />
+                            </a>
+                            <div class="media-body">
+                                <h5 class="media-heading pull-left">woo</h5>
+                                <div class="comment-info pull-left">
+                                    <div class="btn-default btn-xs" th:text="${#temporals.format(comment.regDate, 'yyyy-MM-dd')}"><i class="fa fa-clock-o"></i> Posted 3 weeks ago</div>
+                                </div>
+                                <span style="top: 22px;" th:onclick="'deleteComment(\'' + ${comment.post.id} + '\', \'' + ${comment.id} + '\');'" sec:authorize="hasRole('ROLE_USER')" th:if="${#authentication.principal.github == comment.user.github}" class="glyphicon glyphicon-remove" ></span>
+                                <p class="well" th:text="${comment.content}">awesome</p>
+                            </div>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div> -->
+
+
+
+
+
+
+
+
+   <!-- <div th:if="${session.membersession!=null}">
+    <form action="/logout" method="post">
+       <input type="submit" value="logout">
+    </form>
+    <form action="/mypage">
+       <input type="submit" value="mypage">
+    </form>
+ </div>
+ <div th:if="${session.membersession==null}">
+    <form action="/login" method="post">
+       <input type="submit" value="login">
+    </form>
+ </div> -->
+
+
+
+
+
+
+<!-- <form>
+<div class="form-group">
+<label for="content">한줄평</label>
+<textarea class="form-control" id="content" rows="3"></textarea>
+</div>
+</form>
+<div class="text-right">
+<button type="button" class="btn btn-primary">Summit</button>
+</div> -->
+
+
+<!-- <div>
+<form id="content" method="post" action="main/Insert">
+   <input type="text" name="content" placeholder="한줄평을 적어주세요."/>
+   <input type="submit" value="입력"/>
+</form>
+</div> -->
+
+
+
+
+
+
+<!-- <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">별점</th>
+      <th scope="col">한줄평</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="commentBoard : ${list}">
+      <td th:text="${commentBoard.kakaoId}">Mark</td>
+      <td th:text="${commentBoard.content">Otto</td>
+      <td>Damn</td>
+    </tr>  
+</table>
+<div class="text-right">
+<button type="button" class="btn btn-primary">Summit</button>
+</div> -->
+
+
+<!-- <div>
+<label>한줄평</label>
+<table>
+{{#CommentList}}
+<tr>
+   <td>{{kakaoId}}</td>
+   <td>{{stars}}</td>
+   <td>{{content}}</td>
+   </tr>
+   {{CommentList}}
+</table>
+
+<form id="comment-insert" method="post" action="main/Insert">
+   <input type="text" name="content" placeholder="한줄평을 적어주세요."/>
+   <input type="submit" value="입력"/>
+</form>
+</div> -->
+
+
+<!-- <form action="#" th:action="@{/board/form}" th:object="${board}" method="post">
+<input type="hidden" th:field="*{postNo}">
+<div class="form-group">
+<label for="contents">한줄평</label>
+<textarea style="margin-top:5px;" class="form-control" th:classappend="${#fields.hasErrors('contents')} ? 'is-invalid'" id="contents" rows="3" th:field="*{contents}" placeholder="한줄평을 입력하세요"></textarea>
+<div class="invalid-feedback" th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}"></div>
+</div>
+<div class="text-right">
+<button type="submit" class="btn btn-secondary">등록</button>
+<a type="button" class="btn btn-secondary" th:href="@{/board/list}">취소</a>
+</div>
+</form>
+<br/>         -->
         <!-- comment  -->
-     	<form role="form" method="post">
-			<div class="form-group">
-            	<label for="message-text" class="col-form-label">Comment:</label>
-            	<textarea class="form-control" id="message-text"></textarea>
-				<button type="button" class="btn btn-sm btn-primary float-right">등록</button>
-          	</div>   
+  <!--       <form role="form" method="post">
+         <div class="form-group">
+               <label for="message-text" class="col-form-label">Comment:</label>
+               <textarea class="form-control" id="message-text"></textarea>
+            <button type="button" class="btn btn-sm btn-primary float-right">등록</button>
+             </div>   
 <br>
-			<div class="modal-footer">
-        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      		</div>
-    	</form>
-      	</div>
-	</div>
-</div>
-
+         <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+       </form>
+         </div>
+   </div>
+</div> -->
    <!--row end-->
-	</div> 
+   </div> 
 </div>
-	
+   
 
-<!-- 박스오피스 -->
-<section class="jumbotron text-center">
-	<div class="container">
-	
-	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
- 		 <ol class="carousel-indicators">
-    		<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-    		<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    		<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  		</ol>
-  <div class="carousel-inner">
+
+<!-- 상영예정작 -->
+   <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+  <div class="carousel-inner ">
     <div class="carousel-item active">
-      <img class="d-block w-100" src="https://blog.kakaocdn.net/dn/kKkvU/btqGNDQfLvj/pyR6Pz86HE4UidU7qe9cM0/img.jpg" alt="kingsMan3">
+      <img class="d-block w-100" src="https://dispatch.cdnser.be/wp-content/uploads/2018/09/20180922200509_page.jpg" alt="kingsMan3">
         <div class="carousel-caption d-none d-md-block">
-			<p> 
-				<a href="#" class="btn btn-primary my-2">상세보기</a> 
-				<a href="#" class="btn btn-secondary my-2">예고편 보기</a>
-			</p>
-		</div>
+         <p> 
+            <a href="https://g.co/kgs/9uATnM" target="_blank" class="btn btn-warning my-2">상세보기</a> 
+            <a href="https://youtu.be/kBmwyJaCaic" target="_blank" class="btn btn-warning my-2">예고편 보기</a>
+         </p>
+      </div>
     </div>
     
     <div class="carousel-item">
-      <img class="d-block w-100" src="https://blog.kakaocdn.net/dn/dhmkQY/btqGIqc3N4M/k5xl6PODp5k8UGSOuAuFSK/img.jpg" alt="Mulan">
+      <img class="d-block w-100" src="https://blog.kakaocdn.net/dn/QlmeX/btqGGH00kNF/uEOMiTqu7IvZsL7D5KHpD1/img.jpg" alt="Mulan">
         <div class="carousel-caption d-none d-md-block">
-			<p> 
-				<a href="#" class="btn btn-primary my-2">상세보기</a> 
-				<a href="#" class="btn btn-secondary my-2">예고편 보기</a>
-			</p>
-		</div>
+         <p> 
+            <a href="https://g.co/kgs/SoEL6b" target="_blank" class="btn btn-outline-light my-2">상세보기</a> 
+            <a href="https://youtu.be/FxFN6s2LFMs" target="_blank" class="btn btn-outline-light my-2">예고편 보기</a>
+         </p>
+      </div>
     </div>
     
     <div class="carousel-item">
-      <img class="d-block w-100" src="https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/6wHY/image/R5_GzilI6ySfCn-VS6zSfzPcpZE.jpg" alt="conjuring3">
+      <img class="d-block w-100" src="https://frightfind.com/wp-content/uploads/2019/09/conjuring-3-1280x720.jpg" alt="conjuring3">
         <div class="carousel-caption d-none d-md-block">
-			<p> 
-				<a href="#" class="btn btn-primary my-2">상세보기</a> 
-				<a href="#" class="btn btn-secondary my-2">예고편 보기</a>
-			</p>
-		</div>
+         <p> 
+            <a href="https://g.co/kgs/AFQdoo" target="_blank" class="btn btn-outline-info my-2">상세보기</a> 
+            <a href="https://youtu.be/XJUF9AF_xq8" target="_blank" class="btn btn-outline-info my-2">예고편 보기</a>
+         </p>
+      </div>
     </div>
   </div>
-	<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    	<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    	<span class="sr-only">Previous</span>
-	</a>
-	<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    	<span class="carousel-control-next-icon" aria-hidden="true"></span>
-    	<span class="sr-only">Next</span>
-  	</a>
+   <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+       <span class="sr-only">Previous</span>
+   </a>
+   <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+       <span class="carousel-control-next-icon" aria-hidden="true"></span>
+       <span class="sr-only">Next</span>
+     </a>
 </div>
 
-	</div> <!-- container end -->
-</section>
 </main>
 
 
@@ -251,39 +482,38 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <div class="container">
 
 <div class="footer_sns">
-	<a th:href="@{https://www.facebook.com/}" th:target="_blank" class="fa fa-facebook"></a>
-	<a th:href="@{https://www.twitter.com/}" th:target="_blank" class="fa fa-twitter"></a>
-	<a th:href="@{https://www.google.com/}" th:target="_blank" class="fa fa-google"></a>
-	<a th:href="@{https://www.youtube.com/}" th:target="_blank" class="fa fa-youtube"></a>
-	<a th:href="@{https://www.instagram.com/}" th:target="_blank" class="fa fa-instagram"></a>
-<!-- <div class="tel"> <a href="#">ARS <em>1234-5678</em></a> </div> -->
+   <a th:href="@{https://www.facebook.com/}" th:target="_blank" class="fa fa-facebook fa-2x"></a>
+   <a th:href="@{https://www.twitter.com/}" th:target="_blank" class="fa fa-twitter fa-2x"></a>
+   <a th:href="@{https://www.google.com/}" th:target="_blank" class="fa fa-google fa-2x"></a>
+   <a th:href="@{https://www.youtube.com/}" th:target="_blank" class="fa fa-youtube fa-2x"></a>
+   <a th:href="@{https://www.instagram.com/}" th:target="_blank" class="fa fa-instagram fa-2x"></a>
 </div>
 
 
 <div id="footer_infor">
 <div class="container">
-<!-- 		<div class="footer_infor">
-			<ul>
-				<li><a href="#">회사소개</a></li>
-				<li><a href="#">채용정보</a></li>
-				<li><a href="#">제휴/광고/부대사업 문의</a></li>
-				<li><a href="#">이용약관</a></li>
-				<li><a href="#">개인정보처리방침</a></li>
-				<li><a href="#">고객센터</a></li>
-				<li><a href="#">윤리경영</a></li>
-			</ul>
-		</div> -->	
+<!--       <div class="footer_infor">
+         <ul>
+            <li><a href="#">회사소개</a></li>
+            <li><a href="#">채용정보</a></li>
+            <li><a href="#">제휴/광고/부대사업 문의</a></li>
+            <li><a href="#">이용약관</a></li>
+            <li><a href="#">개인정보처리방침</a></li>
+            <li><a href="#">고객센터</a></li>
+            <li><a href="#">윤리경영</a></li>
+         </ul>
+      </div> -->   
 <address>
 <small>서울특별시 서초구 강남대로 459, Zoo Film(주) <br> <span class="bar2">대표자명 강진영</span> 개인정보보호 책임자 경영지원실 실장 임대혁<br>
 <span class="bar2">사업자등록번호 123-45-67890</span> 통신판매업신고번호 제 1111호 </small><br>
 <small>Copyright 2020 by Zoo Cinema Inc. All right reserved</small>
 </address>
-		<p class="float-right"> <a href="#">Back to top</a></p>
+      <p class="float-right"> <a href="#">Back to top</a></p>
 </div>
 </div>
 </div>
 </div>
-	
+   
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <script src="../../assets/js/vendor/popper.min.js"></script>
@@ -300,7 +530,8 @@ $('.carousel').carousel({
 
 /*----------------------------youtube----------------------------*/
 function getVideo() {
-	var keyword = "테넷 트레일러 ";
+   var innerText = document.getElementById("getMovieInfo").innerText;
+   var keyword = innerText + " 트레일러";
     $.ajax({
       type: 'GET',
       url: 'https://www.googleapis.com/youtube/v3/search',
@@ -322,13 +553,43 @@ function getVideo() {
   }
 function embedVideo(data) {
     $('iframe').attr('src', 'https://www.youtube.com/embed/' + data.items[0].id.videoId)
-    /* $('.trailer').text(data.items[0].snippet.title) */
     $('.description').text(data.items[0].snippet.description)
 }
-
 getVideo();
 //참고 : https://dev.to/aveb/making-your-first-get-request-to-youtube-search-api-4c2f
+
+
 </script>
 
-</html>
+<script>
+var count;
+var words;
 
+function starmark(item){
+count=item.id[0];
+sessionStorage.starRating = count;
+var subid= item.id.substring(1);
+for(var i=0;i<5;i++){
+if(i<count){
+document.getElementById((i+1)+subid).style.color="orange";
+}else{
+document.getElementById((i+1)+subid).style.color="black";
+}
+}
+}
+
+/* function result(){
+
+//평점 : Count
+//한줄평 : Comment(id)
+alert("평점 : "+count+"\n한줄평 : "+document.getElementById("comment").value);
+} */
+
+</script>
+<script type="text/javascript" th:inline="javascript">
+        function deleteComment(postId, commentId){
+            document.getElementById("deleteComment").action = "/comments/"+postId + "/" + commentId;
+            document.getElementById("deleteComment").submit();
+        }
+    </script>
+</html>

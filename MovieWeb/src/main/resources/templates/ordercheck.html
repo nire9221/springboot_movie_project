@@ -10,10 +10,13 @@
 
 결제일시:    <span th:text="${info.approved_at}"></span><br>
 주문번호:    <span th:text="${info.partner_order_id}"></span><br/>
+주문자명:	  <span th:text="${info.partner_user_id}"></span><br/>
 상품명:     <span th:text="${info.item_name}"></span><br/>
 상품수량:    <span th:text="${info.quantity}"></span><br/>
 결제금액:    <span th:text="${info.amount.total}"></span><br/>
 결제방법:    <span th:text="${info.payment_method_type}"></span><br/>
- 
+
+<a href="/">메인페이지</a>
+
 </body>
 </html>

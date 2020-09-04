@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.team2.movie.dao.api.MovieDetailDao;
@@ -41,19 +42,26 @@ public class HomeController {
 	@Autowired
 	MemberDao memberdao;
 	
+	//get all movieList
 	@GetMapping("/")
-	public String movieMain(Model model){ 
+	public String movieMain(Model model) { 
 		List<MovieMain> movieList = movieMainDao.findAll();
-		List<MovieDetail> movieDetailList = movieDetailDao.findAll();
 		model.addAttribute("movieList",movieList);
-		model.addAttribute("movieDetail",movieDetailList);
-		
+//		System.out.println("test"  + model.getAttribute("movieDetail"));
 		return "main";
 	}
 	
-	@PostMapping("/")
-	public String main2() {
-		return "main";
+	@GetMapping("/detailinfo")
+	public String getMovieDetail(Model model, @RequestParam("movieCd") String movieCd) {
+		MovieDetail movieDetailInfo = movieDetailDao.findByMovieCd(movieCd);
+		System.out.println("movieCode : " + movieCd);
+		System.out.println("moviedetail info : "+movieDetailInfo);
+		model.addAttribute("movieDetail",movieDetailInfo);
+		List<MovieMain> movieList = movieMainDao.findAll();
+		model.addAttribute("movieList",movieList);
+		System.out.println("movieList  : "+ movieList);
+		
+		return "main";  
 	}
 	
 	
@@ -94,18 +102,6 @@ public class HomeController {
 		
 		return "signup";
 	}
-	// 로그아웃 구버전
-	/* 
-	 * @RequestMapping(value = "/logout", produces = "application/json") public
-	 * String Logout(HttpSession session) { // kakao restapi 객체 선언 KakaoController
-	 * kr = new KakaoController(); // 노드에 로그아웃한 결과값음 담아줌 매개변수는 세션에 잇는 token을 가져와
-	 * 문자열로 변환 JsonNode node = kr.Logout(session.getAttribute("token").toString());
-	 * // 결과 값 출력 System.out.println("node : "+node);
-	 * System.out.println("로그인 후 반환되는 아이디 : " + node.get("id"));
-	 * 
-	 * session.setAttribute("id", node.get("id")); return "signup"; //return
-	 * "redirect:/signup"; }
-	 */
 	
 	@GetMapping("/signup")
 	public String signup(@RequestParam("name") String name,@RequestParam("mail") String mail,@RequestParam("pnum") String pnum,@RequestParam("year") String year,@RequestParam("mon") String mon,@RequestParam("day") String day, HttpSession session) {
@@ -123,10 +119,8 @@ public class HomeController {
 		member.setBirth(birth);
 		member.setPhone(pnum);
 		member.setEmail(mail);
-		
-		//birth = new Date(Integer.parseInt(year),Integer.parseInt(mon),Integer.parseInt(day));
+
 		memberdao.save(member);
-		System.out.println(member);
 		session.setAttribute("membersession",member);
 		return "redirect:/";
 	}
@@ -144,15 +138,24 @@ public class HomeController {
 	public String test() {
 		return "kakaopay";
 	}
+	
+//	@GetMapping("/kakaoPay")
+//	public String kakaoTest() {
+//		
+//		return "redirect:" + kakaopay.kakaoPayReady();
+//	}
     
     @PostMapping("/kakaoPay")
-    public String kakaoPay(@RequestParam("seat") String seat) {
+    public String kakaoPay(@RequestParam("title") String title,@RequestParam("time") String time, HttpSession session) {
         log.info("kakaoPay post............................................");
         System.out.println("여기로 오겠지");
-        System.out.println(seat);
-        return "redirect:" + kakaopay.kakaoPayReady();
+        System.out.println(title+":"+time);
+        Member mem = (Member) session.getAttribute("membersession");
+        System.out.println(mem.getName());
+        return "redirect:" + kakaopay.kakaoPayReady(title,mem.getName());
         //return "kakaopay.kakaoPayReady()";
     }
+
     
     @GetMapping("/kakaoPaySuccess")
     public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model) {
@@ -160,6 +163,7 @@ public class HomeController {
         log.info("kakaoPaySuccess get............................................");
         log.info("kakaoPaySuccess pg_token : " + pg_token);
         
+        //여기서 결제정보 ticket db에 넣어야함
         model.addAttribute("info", kakaopay.kakaoPayInfo(pg_token));
         
         return "ordercheck";
@@ -167,22 +171,12 @@ public class HomeController {
     
     ///////////////////////////////////////////////////////////////////////////////////////////
     
-    @GetMapping("/seatselect")
-    public String seat() {
-    	return "seatselect";
-    }
+//    @GetMapping("/seatselect")
+//    public String seat(@RequestParam("seat") String seat, Model model) {
+//    	model.addAttribute("seat", seat);
+//    	return "seatselect";
+//    }
     
-    @GetMapping("/seattest")
-    public String seattest(@RequestParam("seat") String seat, Model model) {
-    	model.addAttribute("seat", seat);
-    	return "seattest";
-    }
-    
-    @GetMapping("/seattest2")
-    public String seattest2(@RequestParam("seat") String seat, Model model) {
-    	model.addAttribute("select",seat);
-    	return "seattest2";
-    }
 //    @GetMapping("/Ticket")
 //    public String Ticket(@RequestParam("Ticket") String seat) {
 //    	System.out.println();

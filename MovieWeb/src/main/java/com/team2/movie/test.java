@@ -1,15 +1,14 @@
 package com.team2.movie;
 
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class test {
 
 	public static void main(String[] args) {
-		Random ran = new Random();
-		
-		System.out.println(ran.nextInt(100));
-
-		System.out.println(ran.nextFloat());
+		Date birth = new Date(0,0,02);
+		SimpleDateFormat day = new SimpleDateFormat("yyyy년MM월dd일");
+		System.out.println(day.format(birth));
 	}
 
 }

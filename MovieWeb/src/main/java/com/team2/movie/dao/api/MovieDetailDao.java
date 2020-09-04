@@ -8,5 +8,6 @@ import com.team2.movie.dao.dto.MovieDetail;
 
 @Repository
 public interface MovieDetailDao extends JpaRepository <MovieDetail, Long>{
-	List<MovieDetail> findByMovieCd(String movieCd);
+	MovieDetail findByMovieCd(String movieCd);
+		
 }

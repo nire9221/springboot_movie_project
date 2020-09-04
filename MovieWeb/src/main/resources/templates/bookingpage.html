@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<form action="/kakaoPay" method="post">
+
+
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript"
+	src="http://techtricky.com/wp-content/jquery/jquery.jclock.js"></script>
+<script type="text/javascript"></script>
+<script>
+	function printClock() {
+
+		var clock = document.getElementById("clock"); <!-- 출력할 장소 선택 -->
+		var currentDate = new Date(); <!-- 현재시간 -->
+		var calendar = currentDate.getFullYear() + "-"
+				+ (currentDate.getMonth() + 1) + "-" + currentDate.getDate() <!--현재 날짜-->
+		var amPm = 'AM'; <!--초기값은 AM으로 지정할것-->
+		var currentHours = addZeros(currentDate.getHours(), 2);
+		var currentMinute = addZeros(currentDate.getMinutes(), 2);
+		var currentSeconds = addZeros(currentDate.getSeconds(), 2);
+
+		if (currentHours >= 12) { <!--시간이 12보다 클 때 PM으로 세팅, 12를 빼줌-->
+			amPm = 'PM';
+			currentHours = addZeros(currentHours - 12, 2);
+		}
+
+		if (currentSeconds >= 50) {  <!--0초 이상일 때 색을 변환해 준다.-->
+			currentSeconds = '<span style="color:#de1951;">' + currentSeconds
+					+ '</span>'
+		}
+		clock.innerHTML = currentHours + ":" + currentMinute + ":"
+				+ currentSeconds + " <span style='font-size:50px;'>" + amPm
+				+ "</span>"; <!--날짜를 출력해 줌-->
+
+		setTimeout("printClock()", 1000); <!--1초마다 printClock() 함수 호출-->
+	}
+
+	function addZeros(num, digit) { <!--자릿수 맞춰주는 부분임ㅇ-->
+		var zero = '';
+		num = num.toString();
+		if (num.length < digit) {
+			for (i = 0; i < digit - num.length; i++) {
+				zero += '0';
+			}
+		}
+		return zero + num;
+	}
+
+</script>
+
+<style>
+.ui-datepicker-week-end {
+	color: red;
+}
+
+<!--
+주말 글씨색 붉은색 처리 -->.ui-datepicker-week-end.ui-state-default {
+	color: red;
+}
+
+<!--
+주말 칸들 붉은색 처 -->body {
+	padding: 5px;
+	font-family: Arial;
+}
+
+.ui-datepicker {
+	background-color: #fff;
+}
+
+.ui-datepicker-header {
+	background-color: #616eff;
+}
+
+.ui-datepicker-title {
+	color: white;
+}
+</style>
+<head>
+
+
+<meta charset="UTF-8">
+<title>booking page</title>
+
+
+<!-- jQuery UI CSS파일  -->
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css"
+	type="text/css" />
+<!-- jQuery 기본 js파일 -->
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<!-- jQuery UI 라이브러리 js파일 -->
+<script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js"></script>
+
+<style>
+#logo {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#clock {
+	margin-left: auto;
+	margin-right: auto;
+}
+</style>
+<meta charset="UTF-8">
+<title>예매창</title>
+
+
+</head>
+<body style="text-align: center;">
+	<a href="http://www.cgv.co.kr/"><img src="/images/logo.png" width=250></a>
+
+
+</body>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<h5>상영중인 영화</h5>
+<select name="title" id="title">
+	<option value="">-----------</option>
+	<option th:each="title : ${titles}" th:text="${title.movieid}"
+		th:utext="${title.title}" />
+</select>
+
+<br>
+<br>
+<br>
+<br>
+<body onload="printClock()">
+	<div
+		style="border: 1px solid #dedede; width: 400px; height: 60px; line-height: 70px; color: #666; font-size: 70px; text-align: center;"
+		id="clock"></div>
+</body>
+<br>
+<br>
+<br>
+<br>
+<body>
+	<script>
+		$(function() {
+			$("#testDatepicker").datepicker({
+				
+				minDate: 0 <!-- 오늘 이전의 날은 disable -->
+
+			});
+		});
+	</script>
+	<input type="text" id="testDatepicker">
+	<div id="calendar"></div>
+</body>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<h5>상영 시간</h5>
+<select name="time" id="time">
+	<option value="">00:00 - 00:00</option>
+	<option value="9to11">AM 09:00 - AM 11:30</option>
+	<option value="12to2">AM 12:00 - PM 02:30</option>
+	<option value="3to5">PM 03:00 - PM 05:30</option>
+	<option value="6to8">PM 06:00 - PM 08:30</option>
+	<optgroup label="PM 09:00 - PM 11:30 (예매완료)" />
+	<optgroup label="PM 12:00 - AM 02:30 (예매완료)" />
+</select>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div align=center>
+	<table border=1>
+		<tr>
+			<td>선택 좌석 :&nbsp;</td>
+			<td><input type="text" id="txtName" readonly="readonly" /></td>
+			<td><input type="button" value="좌석 선택하기" onclick="seatselect()" />
+			</td>
+		</tr>
+	</table>
+</div>
+<script type="text/javascript">
+    var seatselect;
+    function seatselect() {
+        popup = window.open("/seatselect", "Popup", "width=300,height=100");
+        popup.focus();
+    }
+</script>
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+	<input type="submit" value="예매하기" />
+</form>
+
+</html>
