@@ -15,10 +15,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,8 +32,8 @@ public class MovieDetail {
 	@Column(name = "MOVIEDETAILID")
 	@NonNull
 	private Long movieDetailId;
-	
-	@Column(name = "MOVIECODE") // JOIN
+
+  @Column(name = "MOVIECODE") 
 	private String movieCd;
 
 	@Column(name = "MOVIENAME")
@@ -62,10 +60,17 @@ public class MovieDetail {
 	@Column(name = "MOVIETYPE")
 	private String typeNm;
 
-	
+	private ArrayList<Map> genres;
 	private ArrayList<Map> nations;
 	private ArrayList<Map> actors;
 	private ArrayList<Map> companys;
 	private ArrayList<Map> directors;
 	private ArrayList<Map> audits;
+
+	private String genreNm;
+	private String nationNm;
+	private String actorNm;
+	private String directorNm;
+	private String companyNm;
+	private String watchGradeNm;
 }
