@@ -1,4 +1,4 @@
-# movie project
+# movie project :movie_camera:
 
 ## About The Project
 Online movie ticketing web
