@@ -7,7 +7,7 @@ Online movie ticketing web
 * Language & Framework : JAVA (JDK8) / Springboot
 * plugged-in : JPA, Lombok, Thymeleaf
 * DB : MariaDB
-* open API : [[Kofic](http://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do)]
+* open API : [Kofic (http://www.kobis.or.kr/kobisopenapi/homepg/apiservice/searchServiceInfo.do)]
 
 ### Documents
  1. UML diagram (Use case, Class, Sequence) : https://drive.google.com/drive/folders/1PciaCCF2LPXmMYUcZS0at0RLzxrkvL0x?usp=sharing
